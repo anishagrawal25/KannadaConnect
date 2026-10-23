@@ -1161,17 +1161,20 @@ body {
 
 .landing-page {
   width: 100%;
-  overflow-x: hidden;
+}
+
+.landing-main-reset {
+  padding-bottom: 0 !important;
 }
 
 .landing-hero-section {
-  padding: 48px 0 36px;
+  padding: 40px 0 32px;
   text-align: center;
 }
 
 @media (min-width: 768px) {
   .landing-hero-section {
-    padding: 68px 0 48px;
+    padding: 56px 0 44px;
   }
 }
 
@@ -1179,7 +1182,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--color-sand);
+  background-color: var(--color-sand-light);
   border: 1px solid var(--color-border);
   padding: 6px 14px;
   border-radius: var(--radius-full);
@@ -1190,7 +1193,7 @@ body {
 }
 
 .landing-headline {
-  font-size: clamp(34px, 5.5vw, 56px);
+  font-size: clamp(34px, 5.2vw, 56px);
   line-height: 1.15;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -1199,10 +1202,10 @@ body {
 }
 
 .landing-subhead {
-  font-size: clamp(16px, 2.2vw, 19px);
+  font-size: clamp(16px, 2vw, 19px);
   color: var(--color-charcoal-muted);
-  max-width: 680px;
-  margin: 0 auto 32px;
+  max-width: 640px;
+  margin: 0 auto 28px;
   line-height: 1.55;
 }
 
@@ -1212,23 +1215,62 @@ body {
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 48px;
+  margin-bottom: 36px;
 }
 
+/* Scenario Switcher Tabs */
+.scenario-switcher-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.scenario-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-charcoal-muted);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.scenario-pill-btn:hover {
+  border-color: var(--color-forest);
+  color: var(--color-forest);
+}
+
+.scenario-pill-btn.active {
+  background-color: var(--color-forest);
+  color: var(--color-ivory);
+  border-color: var(--color-forest);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Interactive Preview Container */
 .landing-preview-container {
-  max-width: 780px;
+  max-width: 800px;
   margin: 0 auto;
   text-align: left;
 }
 
 .landing-preview-card {
   background-color: var(--color-white);
-  border: 1.5px solid var(--color-sage);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 24px;
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-fast);
 }
 
 @media (min-width: 768px) {
@@ -1248,13 +1290,13 @@ body {
 }
 
 .landing-section {
-  padding: 56px 0;
+  padding: 60px 0;
   border-top: 1px solid var(--color-border);
 }
 
 @media (min-width: 768px) {
   .landing-section {
-    padding: 72px 0;
+    padding: 80px 0;
   }
 }
 
@@ -1268,7 +1310,7 @@ body {
 }
 
 .section-heading {
-  font-size: clamp(26px, 3.8vw, 36px);
+  font-size: clamp(26px, 3.6vw, 36px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--color-charcoal);
@@ -1301,6 +1343,8 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
   transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -1335,6 +1379,19 @@ body {
   font-size: 14px;
   color: var(--color-charcoal-muted);
   line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.step-badge {
+  margin-top: auto;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--color-forest);
+  background-color: var(--color-forest-light);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  width: fit-content;
 }
 
 .features-grid {
@@ -1397,11 +1454,20 @@ body {
   line-height: 1.55;
 }
 
+.landing-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin: 24px 0 20px;
+}
+
 .landing-closing-cta {
-  background: linear-gradient(135deg, var(--color-forest) 0%, #0c2b21 100%);
+  background: linear-gradient(135deg, var(--color-forest) 0%, #0e3529 100%);
   border-radius: var(--radius-xl);
   padding: 56px 24px;
-  margin: 48px 0 64px;
+  margin: 48px 0;
   box-shadow: var(--shadow-lg);
   color: var(--color-ivory);
 }
@@ -1409,7 +1475,7 @@ body {
 .landing-footer {
   border-top: 1px solid var(--color-border);
   background-color: var(--color-sand-light);
-  padding: 36px 0 28px;
+  padding: 40px 0 32px;
   color: var(--color-charcoal-muted);
 }
 

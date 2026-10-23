@@ -27,10 +27,16 @@ export default function PublicLayout() {
           {/* Desktop Public Navigation */}
           <nav className="nav-group desktop-nav" aria-label="Public Navigation">
             <Link
-              to="/"
-              className={`nav-btn ${location.pathname === '/' ? 'active' : ''}`}
+              to="/#how-it-works"
+              className="nav-btn"
+              onClick={(e) => {
+                if (location.pathname === '/') {
+                  e.preventDefault();
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
-              <span>Home</span>
+              <span>How It Works</span>
             </Link>
 
             <Link
@@ -88,11 +94,17 @@ export default function PublicLayout() {
         {mobileMenuOpen && (
           <div className="mobile-nav-drawer" role="dialog" aria-modal="true">
             <Link
-              to="/"
-              className={`mobile-nav-link ${location.pathname === '/' ? 'active' : ''}`}
-              onClick={() => setMobileMenuOpen(false)}
+              to="/#how-it-works"
+              className="mobile-nav-link"
+              onClick={(e) => {
+                setMobileMenuOpen(false);
+                if (location.pathname === '/') {
+                  e.preventDefault();
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
-              <span>Home</span>
+              <span>How It Works</span>
             </Link>
 
             <Link
@@ -137,7 +149,7 @@ export default function PublicLayout() {
       </header>
 
       {/* Main Page Body */}
-      <main className="main-content">
+      <main className={`main-content ${location.pathname === '/' ? 'landing-main-reset' : ''}`}>
         <Outlet />
       </main>
     </div>
