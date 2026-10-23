@@ -62,13 +62,24 @@ While conventional translators produce static, word-for-word dictionary translat
   - 💬 **Everyday Conversations**
 - Real-time search indexing English meanings, Kannada script, and Romanized transliteration.
 
-### 6. Offline Saved Phrases
-- Local bookmarking system enabling immediate offline access to critical phrases.
-- Backed by persistent browser `localStorage` with zero account registration or telemetry required.
+### 6. Two Distinct Portals (Public & Authenticated Application)
+- **Public Portal**:
+  - `/` — Interactive landing page with live interactive product preview and 3-step walkthrough.
+  - `/explore` — Searchable public phrasebook with call-to-action banner.
+  - `/login` — Secure sign-in screen with email, password, and visibility toggle.
+  - `/signup` — Registration screen with client-side validation and privacy assurance.
+- **Authenticated Application (Protected Routes)**:
+  - `/app` — Core Say & Show conversational assistant.
+  - `/app/explore` — Full situational phrasebook with bookmarking & Show Mode.
+  - `/app/audio-guide` — Spoken Kannada pronunciation studio with syllable rhythm guidance.
+  - `/app/saved` — Offline saved phrase library with fast recall and deletion.
+  - `/app/account` — Profile overview, membership tenure, local storage model explanation, and working Sign Out action.
 
-### 7. Dual Engine Architecture (AI + Resilient Local Fallback)
-- Connects securely to Google's Gemini API via serverless backend endpoints.
-- If an API key is not configured or network connectivity is unavailable, the application automatically leverages its human-reviewed phrase collection without interrupting the user experience.
+### 7. Real Cryptographic Authentication Flow
+- **Web Crypto PBKDF2 Vault**: Passwords are never stored in plaintext or basic localStorage flags. Key derivation uses 100,000 iterations of SHA-256 with unique 16-byte random salts.
+- **Persistent Sessions**: Cryptographically signed session tokens persisted with expiration checks.
+- **Route Protection**: Dedicated `<ProtectedRoute>` wrapper redirecting unauthenticated visitors to `/login` with preservation of intended destination URLs.
+- **Clean Logout**: Destroys active tokens, resets application state, and redirects cleanly back to the public landing page.
 
 ---
 
@@ -101,7 +112,9 @@ KannadaConnect/
 │   └── ...
 ├── src/
 │   ├── components/
-│   │   ├── Header.jsx            # Brand header, tab routing, saved counter, voice status
+│   │   ├── PublicLayout.jsx      # Public header, navigation, and footer shell
+│   │   ├── AppLayout.jsx         # Authenticated shell, tabs, profile menu, and Sign Out
+│   │   ├── ProtectedRoute.jsx    # Auth route guard and login redirection
 │   │   ├── LandingPage.jsx       # Public landing page with real product preview & walkthrough
 │   │   ├── IntentInput.jsx       # Voice input, situation pills, expanding textarea
 │   │   ├── PhraseResult.jsx      # Kannada script, inline audio, actions, etiquette note
@@ -109,19 +122,30 @@ KannadaConnect/
 │   │   ├── ShowMode.jsx          # Full-screen high-contrast presentation mode
 │   │   ├── SituationExplorer.jsx # Searchable situation phrasebook
 │   │   ├── AudioGuide.jsx        # Dedicated spoken Kannada pronunciation & audio studio
-│   │   ├── SavedPhrases.jsx      # Offline phrase collection with intentional empty state
-│   │   └── PhraseCard.jsx        # Individual phrase presentation card
+│   │   └── SavedPhrases.jsx      # Offline phrase collection with intentional empty state
+│   ├── context/
+│   │   └── AuthContext.jsx       # Authentication state, login, signup, and signout
 │   ├── data/
 │   │   └── phrases.js            # Curated, human-reviewed Kannada phrase dataset
 │   ├── hooks/
 │   │   └── useSpeechRecognition.js # React hook managing Web Speech recognition lifecycle
+│   ├── pages/
+│   │   ├── Login.jsx             # Dedicated sign-in page
+│   │   ├── SignUp.jsx            # Dedicated account registration page
+│   │   ├── Account.jsx           # Profile details and local storage architecture
+│   │   ├── PublicExplore.jsx     # Unauthenticated phrase explorer
+│   │   ├── SayAndShow.jsx        # Core application generator page
+│   │   ├── AppExplore.jsx        # Authenticated phrase explorer
+│   │   ├── AppAudioGuide.jsx     # Spoken audio studio page
+│   │   └── AppSaved.jsx          # Offline saved collection page
 │   ├── services/
-│   │   └── aiService.js          # API client with automatic curated fallback
+│   │   ├── aiService.js          # API client with automatic curated fallback
+│   │   └── authService.js        # Web Crypto PBKDF2 hashing, salting, and sessions
 │   ├── utils/
 │   │   ├── speech.js             # SpeechSynthesis with Kannada voice validation
 │   │   ├── speechRecognition.js  # Web Speech recognition controller
 │   │   └── storage.js            # LocalStorage persistence manager
-│   ├── App.jsx                   # Application root and state orchestrator
+│   ├── App.jsx                   # React Router routing tree & global show mode
 │   ├── index.css                 # Design system tokens and global styling
 │   └── main.jsx
 ├── .env.example

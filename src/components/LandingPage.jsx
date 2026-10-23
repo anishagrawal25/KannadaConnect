@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, 
   Sparkles, 
@@ -8,7 +9,7 @@ import {
   Maximize2, 
   Bookmark, 
   MessageSquareReply, 
-  ShieldCheck 
+  ShieldCheck
 } from 'lucide-react';
 import { CURATED_PHRASES } from '../data/phrases';
 import { speechService } from '../utils/speech';
@@ -16,13 +17,22 @@ import { speechService } from '../utils/speech';
 export default function LandingPage({ 
   onStartApp, 
   onExplore, 
-  onOpenAudioGuide,
   onShowFullscreen 
 }) {
   const [demoSpeaking, setDemoSpeaking] = useState(false);
   const [previewSpeakingId, setPreviewSpeakingId] = useState(null);
+  const navigate = useNavigate();
 
-  // Featured sample phrase for the hero preview
+  const handleStart = () => {
+    if (onStartApp) onStartApp();
+    else navigate('/app');
+  };
+
+  const handleExplore = () => {
+    if (onExplore) onExplore();
+    else navigate('/explore');
+  };
+
   const heroSample = CURATED_PHRASES[0]; // "Does this bus go to Mysuru?"
 
   const handleHeroSpeak = () => {
@@ -67,7 +77,7 @@ export default function LandingPage({
         </h1>
 
         <p className="landing-subhead">
-          From asking for directions to ordering your next meal, find the words you need to communicate confidently across Karnataka.
+          Find the words you need for everyday conversations across Karnataka. Say it, show it, and understand what comes next.
         </p>
 
         {/* Primary CTA Group */}
@@ -75,18 +85,18 @@ export default function LandingPage({
           <button
             type="button"
             className="btn-primary"
-            onClick={onStartApp}
-            id="landing-hero-try-btn"
+            onClick={handleStart}
+            id="landing-hero-getstarted-btn"
             style={{ padding: '13px 28px', fontSize: '16px', borderRadius: 'var(--radius-md)' }}
           >
-            <span>Try KannadaConnect</span>
+            <span>Get Started</span>
             <ArrowRight size={18} />
           </button>
 
           <button
             type="button"
             className="btn-secondary"
-            onClick={onExplore}
+            onClick={handleExplore}
             id="landing-hero-explore-btn"
             style={{ padding: '13px 24px', fontSize: '15px', borderRadius: 'var(--radius-md)' }}
           >
@@ -148,7 +158,7 @@ export default function LandingPage({
               </div>
 
               <div className="kannada-transliteration" style={{ fontSize: '16.5px' }}>
-                {heroSample.transliteration}
+                "{heroSample.transliteration}"
               </div>
 
               <div className="kannada-english-meaning" style={{ fontSize: '14.5px' }}>
@@ -162,21 +172,23 @@ export default function LandingPage({
 
             {/* Preview Action Buttons */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '18px', paddingTop: '14px', borderTop: '1px solid var(--color-border)', flexWrap: 'wrap', gap: '10px' }}>
-              <button
-                type="button"
-                className="btn-outline-forest"
-                onClick={() => onShowFullscreen(heroSample)}
-                style={{ fontSize: '13px', padding: '7px 14px' }}
-              >
-                <Maximize2 size={14} />
-                <span>Test Full-Screen Show Mode</span>
-              </button>
+              {onShowFullscreen && (
+                <button
+                  type="button"
+                  className="btn-outline-forest"
+                  onClick={() => onShowFullscreen(heroSample)}
+                  style={{ fontSize: '13px', padding: '7px 14px' }}
+                >
+                  <Maximize2 size={14} />
+                  <span>Test Full-Screen Show Mode</span>
+                </button>
+              )}
 
               <button
                 type="button"
                 className="btn-primary"
-                onClick={onStartApp}
-                style={{ fontSize: '13px', padding: '7px 16px' }}
+                onClick={handleStart}
+                style={{ fontSize: '13px', padding: '7px 16px', marginLeft: 'auto' }}
               >
                 <span>Launch in App</span>
                 <ArrowRight size={14} />
@@ -250,7 +262,7 @@ export default function LandingPage({
             <div className="feature-icon-box">
               <Sparkles size={22} />
             </div>
-            <h3 className="feature-title">AI-Assisted Phrase Generation</h3>
+            <h3 className="feature-title">AI-Assisted Show & Say</h3>
             <p className="feature-body">
               Powered by Google Gemini to translate natural English communication intents into situational Kannada, backed by an offline reviewed library.
             </p>
@@ -270,7 +282,7 @@ export default function LandingPage({
             <div className="feature-icon-box">
               <Volume2 size={22} />
             </div>
-            <h3 className="feature-title">Voice Mode & Audio Guide</h3>
+            <h3 className="feature-title">Pronunciation Support</h3>
             <p className="feature-body">
               Microphone speech-to-text input in English plus audio pronunciation with syllable cadence breaks and browser Kannada voice detection.
             </p>
@@ -290,7 +302,7 @@ export default function LandingPage({
             <div className="feature-icon-box">
               <MessageSquareReply size={22} />
             </div>
-            <h3 className="feature-title">Understand Possible Replies</h3>
+            <h3 className="feature-title">Contextual Possible Replies</h3>
             <p className="feature-body">
               Never get caught off guard: see the most common responses someone might give in Kannada with English meanings and audio.
             </p>
@@ -300,7 +312,7 @@ export default function LandingPage({
             <div className="feature-icon-box">
               <Bookmark size={22} />
             </div>
-            <h3 className="feature-title">Offline Saved Phrases</h3>
+            <h3 className="feature-title">Saved Offline Phrases</h3>
             <p className="feature-body">
               Bookmark phrases for fast offline access. Stored securely in your browser's local storage without requiring account registration.
             </p>
@@ -343,15 +355,19 @@ export default function LandingPage({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', paddingTop: '12px', marginTop: '10px' }}>
-                  <button
-                    type="button"
-                    className="btn-outline-forest"
-                    onClick={() => onShowFullscreen(p)}
-                    style={{ padding: '6px 12px', fontSize: '12.5px' }}
-                  >
-                    <Maximize2 size={13} />
-                    <span>Show Large</span>
-                  </button>
+                  {onShowFullscreen ? (
+                    <button
+                      type="button"
+                      className="btn-outline-forest"
+                      onClick={() => onShowFullscreen(p)}
+                      style={{ padding: '6px 12px', fontSize: '12.5px' }}
+                    >
+                      <Maximize2 size={13} />
+                      <span>Show Large</span>
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 600 }}>Reviewed</span>
+                  )}
 
                   <button
                     type="button"
@@ -371,7 +387,7 @@ export default function LandingPage({
           <button
             type="button"
             className="btn-secondary"
-            onClick={onExplore}
+            onClick={handleExplore}
             style={{ padding: '10px 24px', fontSize: '14.5px' }}
           >
             <span>View All Curated Phrases</span>
@@ -387,13 +403,13 @@ export default function LandingPage({
             Start speaking Kannada today.
           </h2>
           <p style={{ fontSize: '16px', color: 'var(--color-sage)', marginBottom: '28px', lineHeight: 1.55 }}>
-            No sign-up or registration required. Describe what you need and communicate with confidence across Karnataka.
+            Describe what you need and communicate with confidence across Karnataka.
           </p>
 
           <button
             type="button"
             className="btn-primary"
-            onClick={onStartApp}
+            onClick={handleStart}
             style={{
               backgroundColor: 'var(--color-ivory)',
               color: 'var(--color-forest)',
@@ -403,7 +419,7 @@ export default function LandingPage({
               boxShadow: 'var(--shadow-md)'
             }}
           >
-            <span>Open KannadaConnect</span>
+            <span>Get Started with KannadaConnect</span>
             <ArrowRight size={18} />
           </button>
         </div>
@@ -419,21 +435,18 @@ export default function LandingPage({
             </div>
 
             <div style={{ display: 'flex', gap: '16px', fontSize: '13.5px' }}>
-              <button type="button" onClick={onStartApp} style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600 }}>
-                Say & Show
+              <button type="button" onClick={handleStart} style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600 }}>
+                Get Started
               </button>
-              <button type="button" onClick={onExplore} style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600 }}>
+              <button type="button" onClick={handleExplore} style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600 }}>
                 Explore Phrases
-              </button>
-              <button type="button" onClick={onOpenAudioGuide} style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600 }}>
-                Audio Guide
               </button>
             </div>
           </div>
 
           <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', fontSize: '12.5px', color: 'var(--color-charcoal-subtle)' }}>
             <span>Say it in Kannada. Understand what comes next.</span>
-            <span>Zero accounts required • Stored locally in your browser</span>
+            <span>Zero third-party trackers • Stored locally in your browser</span>
           </div>
         </div>
       </footer>
