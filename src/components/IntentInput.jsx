@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
-import { Send, Sparkles, Bus, Utensils, ShoppingBag, HeartPulse, MessageCircle } from 'lucide-react';
+import { Send, Sparkles, Bus, Utensils, ShoppingBag, HeartPulse, MessageCircle, Mic, MicOff, AlertCircle } from 'lucide-react';
 import { SITUATIONS } from '../data/phrases';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 const EXAMPLE_PROMPTS = [
   { label: 'Bus to Mysuru', text: 'I need to ask whether this bus goes to Mysuru', situation: 'transport' },
@@ -21,17 +22,41 @@ export default function IntentInput({
   error
 }) {
   const textareaRef = useRef(null);
+  const {
+    isSupported: isVoiceSupported,
+    isListening,
+    voiceError,
+    clearVoiceError,
+    startListening,
+    stopListening
+  } = useSpeechRecognition();
 
   const handleKeyDown = (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
       if (!isLoading && intent.trim()) {
+        if (isListening) stopListening();
         onGenerate();
       }
     }
   };
 
+  const handleToggleVoice = () => {
+    clearVoiceError();
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening((transcript) => {
+        setIntent(transcript);
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+        }
+      });
+    }
+  };
+
   const handleSelectExample = (example) => {
+    if (isListening) stopListening();
     setIntent(example.text);
     if (example.situation) {
       setSelectedSituation(example.situation);
@@ -70,13 +95,13 @@ export default function IntentInput({
         ))}
       </div>
 
-      {/* Textarea Input */}
+      {/* Textarea Input with Voice Button */}
       <div className="intent-textarea-wrap">
         <textarea
           ref={textareaRef}
           id="intent-input-field"
           className="intent-textarea"
-          placeholder="Describe what you want to say in English (e.g. 'Ask if this bus goes to Mysuru' or 'Ask for less spicy food')..."
+          placeholder={isListening ? "Listening... Speak your request clearly in English..." : "Describe what you want to say in English (or tap the microphone to speak)..."}
           value={intent}
           onChange={(e) => setIntent(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -87,20 +112,100 @@ export default function IntentInput({
         />
       </div>
 
+      {/* Active Listening State Banner */}
+      {isListening && (
+        <div className="voice-listening-banner" role="status" aria-live="polite">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="voice-wave-dot" aria-hidden="true" />
+            <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--color-forest)' }}>
+              Listening in English... Speak your request now
+            </span>
+          </div>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={stopListening}
+            style={{ padding: '4px 12px', fontSize: '12.5px', borderColor: 'var(--color-sage)' }}
+          >
+            Done Speaking
+          </button>
+        </div>
+      )}
+
+      {/* Voice Error Notice */}
+      {voiceError && (
+        <div style={{
+          marginTop: '12px',
+          padding: '10px 14px',
+          backgroundColor: 'var(--color-terracotta-light)',
+          border: '1px solid #E8B9AA',
+          borderRadius: 'var(--radius-md)',
+          color: 'var(--color-terracotta)',
+          fontSize: '13px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '10px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AlertCircle size={16} style={{ flexShrink: 0 }} />
+            <span>{voiceError}</span>
+          </div>
+          <button
+            type="button"
+            onClick={clearVoiceError}
+            style={{ background: 'none', border: 'none', color: 'var(--color-terracotta)', cursor: 'pointer', fontWeight: 600, fontSize: '12px' }}
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       {/* Input Footer: Meta & Action */}
       <div className="input-footer">
         <div className="input-meta">
           <span>{intent.length} / 300 characters</span>
           <span>•</span>
-          <span>Press <kbd style={{ padding: '1px 5px', background: 'var(--color-sand)', borderRadius: '4px', fontSize: '11px' }}>⌘+Enter</kbd> to generate</span>
+          <span>Press <kbd style={{ padding: '1px 5px', background: 'var(--color-sand)', borderRadius: '4px', fontSize: '11px' }}>⌘+Enter</kbd></span>
         </div>
 
         <div className="input-actions">
+          {/* Microphone Voice Button */}
+          <button
+            type="button"
+            className={`btn-mic ${isListening ? 'listening' : ''}`}
+            onClick={handleToggleVoice}
+            disabled={isLoading}
+            id="btn-voice-input"
+            title={
+              !isVoiceSupported
+                ? "Voice recognition is not supported in this browser (supported in Chrome, Edge, Safari)"
+                : isListening
+                ? "Stop listening"
+                : "Speak your request in English"
+            }
+          >
+            {isListening ? (
+              <>
+                <MicOff size={16} />
+                <span>Stop Listening</span>
+              </>
+            ) : (
+              <>
+                <Mic size={16} />
+                <span>Speak</span>
+              </>
+            )}
+          </button>
+
           {intent && (
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => setIntent('')}
+              onClick={() => {
+                if (isListening) stopListening();
+                setIntent('');
+              }}
               disabled={isLoading}
             >
               Clear
@@ -110,7 +215,10 @@ export default function IntentInput({
           <button
             type="button"
             className="btn-primary"
-            onClick={onGenerate}
+            onClick={() => {
+              if (isListening) stopListening();
+              onGenerate();
+            }}
             disabled={isLoading || !intent.trim()}
             id="generate-kannada-btn"
           >

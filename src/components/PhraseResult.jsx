@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Volume2, 
+  VolumeX,
   Copy, 
   Check, 
   Maximize2, 
@@ -9,7 +10,8 @@ import {
   RefreshCw, 
   Sparkles, 
   Info,
-  ShieldCheck
+  ShieldCheck,
+  X
 } from 'lucide-react';
 import { speechService } from '../utils/speech';
 
@@ -33,7 +35,6 @@ export default function PhraseResult({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback
       setCopied(false);
     }
   };
@@ -51,17 +52,17 @@ export default function PhraseResult({
     const success = speechService.speak(
       result.kannada,
       () => setIsSpeaking(false),
-      (_err) => {
+      (err) => {
         setIsSpeaking(false);
-        setAudioNotice('Kannada audio voice not installed on this browser. Refer to the phonetic pronunciation guide above.');
-        setTimeout(() => setAudioNotice(null), 5000);
+        setAudioNotice(
+          err?.message || 
+          'A native Kannada voice is not installed on this browser. Please refer to the phonetic pronunciation guide and Show Mode.'
+        );
       }
     );
 
-    if (!success) {
+    if (!success && !audioNotice) {
       setIsSpeaking(false);
-      setAudioNotice('Speech synthesis unavailable on this device.');
-      setTimeout(() => setAudioNotice(null), 5000);
     }
   };
 
@@ -97,10 +98,41 @@ export default function PhraseResult({
           </div>
         </div>
 
-        {/* Kannada Script Hero Box */}
+        {/* Kannada Script Hero Box with Inline Listen Action */}
         <div className="kannada-hero-block">
-          <div className="kannada-main-script kannada-text" id="kannada-phrase-text">
-            {result.kannada}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '12px' }}>
+            <div className="kannada-main-script kannada-text" id="kannada-phrase-text" style={{ marginBottom: 0 }}>
+              {result.kannada}
+            </div>
+
+            {/* Direct Listen Button beside Kannada sentence */}
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleSpeak}
+              id="btn-speak-inline"
+              title={isSpeaking ? "Stop audio playback" : "Listen to Kannada pronunciation"}
+              style={{
+                flexShrink: 0,
+                padding: '8px 14px',
+                fontSize: '13px',
+                backgroundColor: isSpeaking ? 'var(--color-terracotta-light)' : 'var(--color-white)',
+                borderColor: isSpeaking ? '#E8B9AA' : 'var(--color-border)',
+                color: isSpeaking ? 'var(--color-terracotta)' : 'var(--color-forest)'
+              }}
+            >
+              {isSpeaking ? (
+                <>
+                  <VolumeX size={15} />
+                  <span>Stop</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 size={15} />
+                  <span>Listen</span>
+                </>
+              )}
+            </button>
           </div>
 
           <div className="kannada-transliteration">
@@ -122,18 +154,29 @@ export default function PhraseResult({
         {audioNotice && (
           <div style={{
             margin: '8px 0 16px',
-            padding: '8px 12px',
+            padding: '10px 14px',
             backgroundColor: 'var(--color-gold-light)',
             border: '1px solid #E8D39E',
             borderRadius: 'var(--radius-md)',
             color: 'var(--color-gold)',
-            fontSize: '12.5px',
+            fontSize: '13px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            justifyContent: 'space-between',
+            gap: '12px'
           }}>
-            <Info size={15} />
-            <span>{audioNotice}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Info size={16} style={{ flexShrink: 0 }} />
+              <span>{audioNotice}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAudioNotice(null)}
+              style={{ background: 'none', border: 'none', color: 'var(--color-gold)', cursor: 'pointer', padding: '2px' }}
+              title="Dismiss notice"
+            >
+              <X size={14} />
+            </button>
           </div>
         )}
 
@@ -151,16 +194,25 @@ export default function PhraseResult({
             <span>Show Full Screen</span>
           </button>
 
-          {/* Listen Button */}
+          {/* Listen Button in Toolbar */}
           <button
             type="button"
             className="btn-secondary"
             onClick={handleSpeak}
             id="btn-speak-phrase"
-            title="Listen to pronunciation"
+            title={isSpeaking ? "Stop audio playback" : "Listen to pronunciation"}
           >
-            <Volume2 size={16} color={isSpeaking ? 'var(--color-forest)' : 'currentColor'} />
-            <span>{isSpeaking ? 'Playing...' : 'Pronounce'}</span>
+            {isSpeaking ? (
+              <>
+                <VolumeX size={16} color="var(--color-terracotta)" />
+                <span style={{ color: 'var(--color-terracotta)' }}>Stop Audio</span>
+              </>
+            ) : (
+              <>
+                <Volume2 size={16} color="var(--color-forest)" />
+                <span>Listen Audio</span>
+              </>
+            )}
           </button>
 
           {/* Copy Button */}

@@ -1,4 +1,4 @@
-// Speech Synthesis utility with Kannada voice detection and graceful degradation
+// Speech Synthesis utility with Kannada voice detection, stop support, and graceful degradation
 
 class SpeechService {
   constructor() {
@@ -21,9 +21,9 @@ class SpeechService {
     if (!this.synth) return;
     try {
       this.voices = this.synth.getVoices() || [];
-      // Look for Kannada voice: kn-IN, kn_IN, or containing Kannada
+      // Look strictly for Kannada voice: kn-IN, kn_IN, or name containing Kannada
       this.kannadaVoice = this.voices.find(v => 
-        (v.lang && (v.lang.toLowerCase() === 'kn-in' || v.lang.toLowerCase() === 'kn_in' || v.lang.startsWith('kn'))) ||
+        (v.lang && (v.lang.toLowerCase() === 'kn-in' || v.lang.toLowerCase() === 'kn_in' || v.lang.toLowerCase().startsWith('kn'))) ||
         (v.name && v.name.toLowerCase().includes('kannada'))
       ) || null;
       this.initialized = true;
@@ -34,7 +34,7 @@ class SpeechService {
 
   hasKannadaVoice() {
     if (!this.synth) return false;
-    if (!this.initialized) this.initVoices();
+    if (!this.initialized || !this.kannadaVoice) this.initVoices();
     return !!this.kannadaVoice;
   }
 
@@ -44,22 +44,35 @@ class SpeechService {
 
   speak(text, onEndCallback = null, onErrorCallback = null) {
     if (!this.synth) {
-      if (onErrorCallback) onErrorCallback('Speech synthesis not supported in this browser.');
+      if (onErrorCallback) {
+        onErrorCallback({
+          code: 'UNSUPPORTED',
+          message: 'Speech synthesis is not supported in this browser.'
+        });
+      }
+      return false;
+    }
+
+    // Cancel any previous speech playback
+    this.stop();
+
+    // Check if system has a Kannada voice
+    this.initVoices();
+    if (!this.kannadaVoice) {
+      if (onErrorCallback) {
+        onErrorCallback({
+          code: 'NO_KANNADA_VOICE',
+          message: 'A native Kannada voice is not installed on this browser/operating system. The phonetic pronunciation guide and full-screen Show Mode are available.'
+        });
+      }
       return false;
     }
 
     try {
-      this.synth.cancel(); // Stop any pending speech
-
       const utterance = new SpeechSynthesisUtterance(text);
-      if (this.kannadaVoice) {
-        utterance.voice = this.kannadaVoice;
-        utterance.lang = this.kannadaVoice.lang || 'kn-IN';
-      } else {
-        utterance.lang = 'kn-IN';
-      }
-
-      utterance.rate = 0.85; // Slightly slower for crisp pronunciation clarity
+      utterance.voice = this.kannadaVoice;
+      utterance.lang = this.kannadaVoice.lang || 'kn-IN';
+      utterance.rate = 0.85; // Slightly slower pace for phonetic clarity
       utterance.pitch = 1.0;
 
       utterance.onstart = () => {
@@ -76,20 +89,35 @@ class SpeechService {
       utterance.onerror = (e) => {
         this.isSpeaking = false;
         if (this.onStateChange) this.onStateChange(false);
-        if (onErrorCallback) onErrorCallback(e);
+        if (onErrorCallback) {
+          onErrorCallback({
+            code: 'PLAYBACK_ERROR',
+            message: e?.error || 'Speech playback failed.'
+          });
+        }
       };
 
       this.synth.speak(utterance);
       return true;
     } catch (err) {
-      if (onErrorCallback) onErrorCallback(err);
+      this.isSpeaking = false;
+      if (onErrorCallback) {
+        onErrorCallback({
+          code: 'EXCEPTION',
+          message: err?.message || 'Error executing speech synthesis.'
+        });
+      }
       return false;
     }
   }
 
   stop() {
     if (this.synth) {
-      this.synth.cancel();
+      try {
+        this.synth.cancel();
+      } catch {
+        // Ignore
+      }
       this.isSpeaking = false;
       if (this.onStateChange) this.onStateChange(false);
     }

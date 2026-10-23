@@ -28,7 +28,8 @@ Unlike generic translators that translate word-for-word without real-world conte
 ### 1. Smart Show & Say
 - Natural language intent translation with situational context (Transport, Food, Shopping, Health, Everyday Conversation).
 - Clickable real-life example prompts for immediate one-click testing.
-- Pronunciation audio playback using browser SpeechSynthesis with Kannada voice detection.
+- **Voice Input (Speech Recognition)**: Tap the microphone button to speak your English intent naturally. Browser Web Speech Recognition converts voice to editable text with clear listening indicators and manual stop controls.
+- **Kannada Voice Output (Speech Synthesis)**: Dedicated Listen buttons beside the Kannada sentence and toolbar with authentic Kannada voice detection, stop support, and fallback explanations.
 - Fast clipboard copy with feedback toast.
 - Cultural etiquette tips (e.g. respectful suffixes like *-kodi* and *-ree*, gestures, tipping tips).
 

@@ -65,7 +65,6 @@ export default function Header({ activeTab, setActiveTab, savedCount }) {
           {/* Voice indicator badge */}
           <div 
             style={{ 
-              display: 'none',
               alignItems: 'center', 
               gap: '4px', 
               fontSize: '11px', 
@@ -76,7 +75,7 @@ export default function Header({ activeTab, setActiveTab, savedCount }) {
               marginLeft: '4px'
             }}
             className="voice-status-pill"
-            title={hasVoice ? "Kannada text-to-speech voice detected" : "Speech synthesis voice in fallback mode"}
+            title={hasVoice ? "Kannada text-to-speech voice detected" : "Speech synthesis in text/phonetic mode"}
           >
             <Volume2 size={12} />
             <span style={{ fontWeight: 600 }}>{hasVoice ? 'Voice Ready' : 'Audio Guide'}</span>
