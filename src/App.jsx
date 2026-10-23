@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
+import LandingPage from './components/LandingPage';
 import IntentInput from './components/IntentInput';
 import PhraseResult from './components/PhraseResult';
 import ReplyList from './components/ReplyList';
 import SituationExplorer from './components/SituationExplorer';
+import AudioGuide from './components/AudioGuide';
 import SavedPhrases from './components/SavedPhrases';
 import ShowMode from './components/ShowMode';
 import { generateKannadaPhrase } from './services/aiService';
@@ -11,8 +13,16 @@ import { getSavedPhrases, savePhrase, removeSavedPhrase, isPhraseSaved } from '.
 import { Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Screens
-  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'explore' | 'saved'
+  // Navigation & Screen routing state
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.replace('#', '');
+      if (['landing', 'home', 'explore', 'audio', 'saved'].includes(hash)) {
+        return hash;
+      }
+    }
+    return 'landing';
+  });
 
   // Intent & Input State
   const [intent, setIntent] = useState('');
@@ -32,11 +42,30 @@ export default function App() {
   // Toast Notification
   const [toastMessage, setToastMessage] = useState(null);
 
-  // Load saved phrases on startup
+  // Load saved phrases on startup & sync hash
   useEffect(() => {
     const loaded = getSavedPhrases();
     setSavedPhrases(loaded);
+
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['landing', 'home', 'explore', 'audio', 'saved'].includes(hash)) {
+        setActiveTab(hash);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  // Update hash when activeTab changes
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (typeof window !== 'undefined') {
+      window.location.hash = tab;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -105,19 +134,29 @@ export default function App() {
 
   return (
     <div className="app-layout">
-      {/* Navigation Header */}
+      {/* Unified Navigation Header across all screens */}
       <Header
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         savedCount={savedPhrases.length}
       />
 
       <main className="main-content">
         <div className="container">
-          {/* SCREEN 1 & 2: HOME & GENERATED PHRASE */}
+          {/* SCREEN 1: DEDICATED PUBLIC LANDING PAGE */}
+          {activeTab === 'landing' && (
+            <LandingPage
+              onStartApp={() => handleTabChange('home')}
+              onExplore={() => handleTabChange('explore')}
+              onOpenAudioGuide={() => handleTabChange('audio')}
+              onShowFullscreen={handleOpenShowMode}
+            />
+          )}
+
+          {/* SCREEN 2: SAY & SHOW (APPLICATION GENERATOR) */}
           {activeTab === 'home' && (
             <>
-              {/* Hero Header */}
+              {/* Intent Input Hero Section */}
               <section className="hero-section">
                 <div className="hero-tag">
                   <span style={{ fontSize: '13px' }}>ಕ</span>
@@ -157,16 +196,15 @@ export default function App() {
                   {/* "What they might say" - Contextual Replies */}
                   <ReplyList
                     replies={currentResult.replies}
-                    situationLabel={currentResult.situationLabel}
                   />
                 </>
               )}
 
-              {/* How KannadaConnect Works (Only show if no result yet to keep screen focused) */}
+              {/* How KannadaConnect Works (Shown when no result generated yet) */}
               {!currentResult && (
                 <section style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid var(--color-border)' }}>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-charcoal-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '16px' }}>
-                    The KannadaConnect Flow
+                    The KannadaConnect Journey
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
                     <div style={{ padding: '20px', background: 'var(--color-white)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)' }}>
@@ -175,7 +213,7 @@ export default function App() {
                       </div>
                       <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '6px' }}>Describe in English</h4>
                       <p style={{ fontSize: '13.5px', color: 'var(--color-charcoal-muted)' }}>
-                        Type your intent naturally. No need to memorize complex grammar or vocabulary upfront.
+                        Type naturally or tap the microphone to dictate your English intent.
                       </p>
                     </div>
 
@@ -213,19 +251,28 @@ export default function App() {
             />
           )}
 
-          {/* SCREEN 4: SAVED PHRASES */}
+          {/* SCREEN 4: AUDIO GUIDE */}
+          {activeTab === 'audio' && (
+            <AudioGuide
+              onShowFullscreen={handleOpenShowMode}
+              onNavigateHome={() => handleTabChange('home')}
+            />
+          )}
+
+          {/* SCREEN 5: SAVED PHRASES */}
           {activeTab === 'saved' && (
             <SavedPhrases
               savedPhrases={savedPhrases}
               onRemove={handleToggleSave}
               onShowFullscreen={handleOpenShowMode}
-              onNavigateHome={() => setActiveTab('home')}
+              onNavigateHome={() => handleTabChange('home')}
+              onNavigateExplore={() => handleTabChange('explore')}
             />
           )}
         </div>
       </main>
 
-      {/* SCREEN 5: FULL-SCREEN SHOW MODE MODAL */}
+      {/* FULL-SCREEN SHOW MODE MODAL (ACCESSIBLE FROM ANY TAB) */}
       {showModePhrase && (
         <ShowMode
           phrase={showModePhrase}
@@ -241,17 +288,19 @@ export default function App() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="app-footer">
-        <div className="container">
-          <p>
-            <strong>KannadaConnect</strong> — Empowering real-world communication across Karnataka.
-          </p>
-          <p style={{ fontSize: '12px', marginTop: '6px', color: 'var(--color-charcoal-subtle)' }}>
-            Say it in Kannada. Understand what comes next. Built for residents, students, and travelers.
-          </p>
-        </div>
-      </footer>
+      {/* Footer (Standardized across app views) */}
+      {activeTab !== 'landing' && (
+        <footer className="app-footer">
+          <div className="container">
+            <p>
+              <strong>KannadaConnect</strong> — Empowering real-world communication across Karnataka.
+            </p>
+            <p style={{ fontSize: '12px', marginTop: '6px', color: 'var(--color-charcoal-subtle)' }}>
+              Say it in Kannada. Understand what comes next. Built for residents, students, and travelers.
+            </p>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

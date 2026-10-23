@@ -102,12 +102,14 @@ KannadaConnect/
 ├── src/
 │   ├── components/
 │   │   ├── Header.jsx            # Brand header, tab routing, saved counter, voice status
+│   │   ├── LandingPage.jsx       # Public landing page with real product preview & walkthrough
 │   │   ├── IntentInput.jsx       # Voice input, situation pills, expanding textarea
 │   │   ├── PhraseResult.jsx      # Kannada script, inline audio, actions, etiquette note
 │   │   ├── ReplyList.jsx         # Contextual reply suggestions with audio
 │   │   ├── ShowMode.jsx          # Full-screen high-contrast presentation mode
 │   │   ├── SituationExplorer.jsx # Searchable situation phrasebook
-│   │   ├── SavedPhrases.jsx      # Offline phrase collection
+│   │   ├── AudioGuide.jsx        # Dedicated spoken Kannada pronunciation & audio studio
+│   │   ├── SavedPhrases.jsx      # Offline phrase collection with intentional empty state
 │   │   └── PhraseCard.jsx        # Individual phrase presentation card
 │   ├── data/
 │   │   └── phrases.js            # Curated, human-reviewed Kannada phrase dataset
