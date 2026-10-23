@@ -7,7 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicLayout from './components/PublicLayout';
 import AppLayout from './components/AppLayout';
 
-// Public Portal Pages
+// Public Pages
 import LandingPage from './components/LandingPage';
 import PublicExplore from './pages/PublicExplore';
 import Login from './pages/Login';

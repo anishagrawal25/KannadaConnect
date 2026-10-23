@@ -54,3 +54,14 @@ export function isPhraseSaved(phrase) {
   const current = getSavedPhrases();
   return current.some(p => (phrase.id && p.id === phrase.id) || p.kannada === phrase.kannada);
 }
+
+export function clearSavedPhrases() {
+  if (typeof window === 'undefined') return [];
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    return [];
+  } catch (e) {
+    console.error('Failed to clear saved phrases:', e);
+    return [];
+  }
+}

@@ -14,6 +14,7 @@ import {
   X
 } from 'lucide-react';
 import { speechService } from '../utils/speech';
+import { usePreferences } from '../hooks/usePreferences';
 
 export default function PhraseResult({
   result,
@@ -23,6 +24,7 @@ export default function PhraseResult({
   onRephrase,
   isLoading
 }) {
+  const { preferences } = usePreferences();
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audioNotice, setAudioNotice] = useState(null);
@@ -135,13 +137,17 @@ export default function PhraseResult({
             </button>
           </div>
 
-          <div className="kannada-transliteration">
-            {result.transliteration}
-          </div>
+          {preferences.showTransliteration !== false && result.transliteration && (
+            <div className="kannada-transliteration">
+              {result.transliteration}
+            </div>
+          )}
 
-          <div className="kannada-english-meaning">
-            <strong>Meaning:</strong> {result.english}
-          </div>
+          {preferences.showEnglishMeaning !== false && result.english && (
+            <div className="kannada-english-meaning">
+              <strong>Meaning:</strong> {result.english}
+            </div>
+          )}
 
           {result.pronunciationGuide && (
             <div className="kannada-phonetic-tip">

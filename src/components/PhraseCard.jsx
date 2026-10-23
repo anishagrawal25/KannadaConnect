@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Maximize2, Volume2, Copy, Check, Bookmark, BookmarkCheck } from 'lucide-react';
 import { speechService } from '../utils/speech';
+import { usePreferences } from '../hooks/usePreferences';
 
 export default function PhraseCard({
   phrase,
@@ -8,6 +9,7 @@ export default function PhraseCard({
   onToggleSave,
   isSaved
 }) {
+  const { preferences } = usePreferences();
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
@@ -54,13 +56,17 @@ export default function PhraseCard({
           {phrase.kannada}
         </div>
 
-        <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-charcoal)', marginBottom: '4px' }}>
-          {phrase.transliteration}
-        </div>
+        {preferences.showTransliteration !== false && phrase.transliteration && (
+          <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-charcoal)', marginBottom: '4px' }}>
+            {phrase.transliteration}
+          </div>
+        )}
 
-        <div style={{ fontSize: '13.5px', color: 'var(--color-charcoal-muted)' }}>
-          {phrase.english}
-        </div>
+        {preferences.showEnglishMeaning !== false && phrase.english && (
+          <div style={{ fontSize: '13.5px', color: 'var(--color-charcoal-muted)' }}>
+            {phrase.english}
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', paddingTop: '12px', marginTop: '8px' }}>

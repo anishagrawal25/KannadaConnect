@@ -42,6 +42,27 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const updateProfile = async ({ name }) => {
+    setIsLoading(true);
+    try {
+      const updatedUser = await authService.updateProfile({ name });
+      setUser(updatedUser);
+      setSession(prev => prev ? { ...prev, user: updatedUser } : prev);
+      return updatedUser;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const changePassword = async ({ currentPassword, newPassword }) => {
+    setIsLoading(true);
+    try {
+      return await authService.changePassword({ currentPassword, newPassword });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const signOut = async () => {
     setIsLoading(true);
     try {
@@ -60,7 +81,9 @@ export function AuthProvider({ children }) {
     isLoading,
     signUp,
     signIn,
-    signOut
+    signOut,
+    updateProfile,
+    changePassword
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

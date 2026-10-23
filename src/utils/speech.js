@@ -1,4 +1,5 @@
 // Speech Synthesis utility with Kannada voice detection, stop support, and graceful degradation
+import { getPreferences } from './preferences';
 
 class SpeechService {
   constructor() {
@@ -72,7 +73,9 @@ class SpeechService {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.voice = this.kannadaVoice;
       utterance.lang = this.kannadaVoice.lang || 'kn-IN';
-      utterance.rate = 0.85; // Slightly slower pace for phonetic clarity
+      const prefs = getPreferences();
+      const preferredRate = options?.rate || prefs?.speechRate || 0.85;
+      utterance.rate = preferredRate; // Tuned pace for phonetic clarity
       utterance.pitch = 1.0;
 
       utterance.onstart = () => {

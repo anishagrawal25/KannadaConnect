@@ -44,7 +44,6 @@ export default function AppLayout({ savedCount }) {
             <div className="brand-emblem" aria-hidden="true">ಕ</div>
             <div>
               <div className="brand-title">KannadaConnect</div>
-              <div className="brand-tag-small">Assistant</div>
             </div>
           </Link>
 

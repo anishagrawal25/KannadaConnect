@@ -21,7 +21,6 @@ export default function PublicLayout() {
             <div className="brand-emblem" aria-hidden="true">ಕ</div>
             <div>
               <div className="brand-title">KannadaConnect</div>
-              <div className="brand-tag-small">Public Portal</div>
             </div>
           </Link>
 

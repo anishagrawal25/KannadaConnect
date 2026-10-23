@@ -201,6 +201,72 @@ class AuthService {
     return session;
   }
 
+  async updateProfile({ name }) {
+    if (!name || !name.trim()) {
+      throw new Error('Name cannot be empty.');
+    }
+    if (name.trim().length < 2) {
+      throw new Error('Name must be at least 2 characters long.');
+    }
+
+    const session = this.getSession();
+    if (!session || !session.user) {
+      throw new Error('You must be signed in to update your profile.');
+    }
+
+    const vault = this.getVault();
+    const userIndex = vault.users.findIndex(u => u.id === session.user.id || u.email === session.user.email);
+    if (userIndex === -1) {
+      throw new Error('User record not found in vault.');
+    }
+
+    const cleanName = name.trim();
+    vault.users[userIndex].name = cleanName;
+    this.saveVault(vault);
+
+    // Update active session
+    session.user.name = cleanName;
+    this.saveSession(session);
+
+    return session.user;
+  }
+
+  async changePassword({ currentPassword, newPassword }) {
+    if (!currentPassword) {
+      throw new Error('Please enter your current password.');
+    }
+    if (!newPassword || newPassword.length < 6) {
+      throw new Error('New password must be at least 6 characters long.');
+    }
+
+    const session = this.getSession();
+    if (!session || !session.user) {
+      throw new Error('You must be signed in to change your password.');
+    }
+
+    const vault = this.getVault();
+    const user = vault.users.find(u => u.id === session.user.id || u.email === session.user.email);
+    if (!user) {
+      throw new Error('User record not found in vault.');
+    }
+
+    // Verify current password hash
+    const currentHash = await hashPassword(currentPassword, user.salt);
+    if (currentHash !== user.passwordHash) {
+      throw new Error('The current password you entered is incorrect.');
+    }
+
+    // Generate new cryptographic salt and hash
+    const newSalt = generateRandomToken(16);
+    const newPasswordHash = await hashPassword(newPassword, newSalt);
+
+    user.salt = newSalt;
+    user.passwordHash = newPasswordHash;
+    this.saveVault(vault);
+
+    return true;
+  }
+
   async signOut() {
     this.clearSession();
     return true;
