@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Eye, EyeOff, Lock, Mail, User, ArrowRight, AlertCircle, ShieldCheck } from 'lucide-react';
 
@@ -14,12 +14,15 @@ export default function SignUp() {
 
   const { signUp, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/conversations';
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      navigate('/conversations', { replace: true });
+      navigate(from, { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, from]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +42,7 @@ export default function SignUp() {
 
     try {
       await signUp({ name, email, password });
-      navigate('/conversations', { replace: true });
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err.message || 'Could not complete registration. Please try again.');
     } finally {
@@ -186,7 +189,7 @@ export default function SignUp() {
         <div className="auth-footer-links">
           <p>
             Already have an account?{' '}
-            <Link to="/login" className="auth-link">
+            <Link to="/login" state={{ from: location.state?.from }} className="auth-link">
               Sign in here
             </Link>
           </p>
@@ -197,8 +200,8 @@ export default function SignUp() {
           </div>
 
           <div style={{ marginTop: '16px' }}>
-            <Link to="/conversations" style={{ fontSize: '13px', color: 'var(--color-charcoal-subtle)', textDecoration: 'none' }}>
-              ← Return to KannadaConnect
+            <Link to="/" style={{ fontSize: '13px', color: 'var(--color-charcoal-subtle)', textDecoration: 'none' }}>
+              ← Return to public website
             </Link>
           </div>
         </div>

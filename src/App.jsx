@@ -13,6 +13,7 @@ import AppSaved from './pages/AppSaved';
 
 // Auth Context & Auth Pages
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 
@@ -63,25 +64,23 @@ export default function App() {
           <Route path="/signup" element={<SignUp />} />
 
           <Route element={<AppLayout savedCount={savedPhrases.length} />}>
-            {/* Landing / Overview */}
+            {/* Landing / Overview (Public) */}
             <Route
               path="/"
-              element={
-                <LandingPage
-                  onShowFullscreen={(phrase) => setShowModePhrase(phrase)}
-                />
-              }
+              element={<LandingPage />}
             />
 
-            {/* Core Feature A: Everyday Kannada Conversations */}
+            {/* Core Feature A: Everyday Kannada Conversations (Protected) */}
             <Route
               path="/conversations"
               element={
-                <SayAndShow
-                  onToggleSave={handleToggleSave}
-                  savedPhrases={savedPhrases}
-                  showToast={showToast}
-                />
+                <ProtectedRoute>
+                  <SayAndShow
+                    onToggleSave={handleToggleSave}
+                    savedPhrases={savedPhrases}
+                    showToast={showToast}
+                  />
+                </ProtectedRoute>
               }
             />
             {/* Backward compatibility route */}
@@ -90,26 +89,36 @@ export default function App() {
               element={<Navigate to="/conversations" replace />}
             />
 
-            {/* Core Feature B: Practical Vocabulary */}
+            {/* Core Feature B: Practical Vocabulary (Protected) */}
             <Route
               path="/vocabulary"
-              element={<Vocabulary />}
+              element={
+                <ProtectedRoute>
+                  <Vocabulary />
+                </ProtectedRoute>
+              }
             />
 
-            {/* Core Feature C: Guided Speaking Practice */}
+            {/* Core Feature C: Guided Speaking Practice (Protected) */}
             <Route
               path="/practice"
-              element={<GuidedPractice />}
+              element={
+                <ProtectedRoute>
+                  <GuidedPractice />
+                </ProtectedRoute>
+              }
             />
 
-            {/* Saved Collection for revision */}
+            {/* Saved Collection for revision (Protected) */}
             <Route
               path="/saved"
               element={
-                <AppSaved
-                  savedPhrases={savedPhrases}
-                  onRemove={handleToggleSave}
-                />
+                <ProtectedRoute>
+                  <AppSaved
+                    savedPhrases={savedPhrases}
+                    onRemove={handleToggleSave}
+                  />
+                </ProtectedRoute>
               }
             />
             {/* Backward compatibility */}

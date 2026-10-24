@@ -135,7 +135,7 @@ export default function Login() {
         <div className="auth-footer-links">
           <p>
             Don't have an account yet?{' '}
-            <Link to="/signup" className="auth-link">
+            <Link to="/signup" state={{ from: location.state?.from }} className="auth-link">
               Sign up here
             </Link>
           </p>
@@ -146,8 +146,8 @@ export default function Login() {
           </div>
 
           <div style={{ marginTop: '16px' }}>
-            <Link to="/conversations" style={{ fontSize: '13px', color: 'var(--color-charcoal-subtle)', textDecoration: 'none' }}>
-              ← Return to KannadaConnect
+            <Link to="/" style={{ fontSize: '13px', color: 'var(--color-charcoal-subtle)', textDecoration: 'none' }}>
+              ← Return to public website
             </Link>
           </div>
         </div>
