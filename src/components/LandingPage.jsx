@@ -10,7 +10,6 @@ import {
   MessageSquare,
   BookOpen,
   Mic,
-  LogIn,
   CheckCircle2
 } from 'lucide-react';
 import { CURATED_PHRASES } from '../data/phrases';
@@ -69,10 +68,6 @@ export default function LandingPage({ onShowFullscreen }) {
     navigate('/signup');
   };
 
-  const handleSignIn = () => {
-    navigate('/login');
-  };
-
   const activeScenario = HERO_SCENARIOS[selectedScenarioIndex];
   const activePhrase = activeScenario.phrase;
 
@@ -117,33 +112,22 @@ export default function LandingPage({ onShowFullscreen }) {
             Communicate with confidence when talking to bus conductors, auto drivers, shopkeepers, and doctors. Master authentic conversations, explore everyday vocabulary, and practice speaking aloud.
           </p>
 
-          {/* Clean Primary CTA Group: Get Started -> Sign Up, Sign In -> Login */}
-          <div className="landing-cta-group" style={{ marginBottom: '14px' }}>
+          {/* Primary CTA: Only Get Started */}
+          <div className="landing-cta-group" style={{ marginBottom: '14px', justifyContent: 'center' }}>
             <button
               type="button"
               className="btn-primary"
               onClick={handleGetStarted}
               id="landing-hero-getstarted-btn"
-              style={{ padding: '14px 32px', fontSize: '16px', borderRadius: 'var(--radius-md)' }}
+              style={{ padding: '14px 36px', fontSize: '16px', borderRadius: 'var(--radius-md)' }}
             >
               <span>Get Started</span>
               <ArrowRight size={18} />
             </button>
-
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={handleSignIn}
-              id="landing-hero-signin-btn"
-              style={{ padding: '14px 28px', fontSize: '15px', borderRadius: 'var(--radius-md)' }}
-            >
-              <LogIn size={17} />
-              <span>Sign In</span>
-            </button>
           </div>
 
           <div style={{ fontSize: '13px', color: 'var(--color-charcoal-subtle)', marginBottom: '36px' }}>
-            Free account • Immediate access to Conversations, Vocabulary & Guided Practice
+            Free access to Conversations, Practical Vocabulary & Guided Practice
           </div>
 
           {/* 2. REALISTIC INTERACTIVE PRODUCT PREVIEW */}
@@ -431,7 +415,7 @@ export default function LandingPage({ onShowFullscreen }) {
               Join KannadaConnect to learn practical everyday expressions, vocabulary, and guided practice for real-world interactions.
             </p>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
               <button
                 type="button"
                 className="btn-primary"
@@ -439,30 +423,14 @@ export default function LandingPage({ onShowFullscreen }) {
                 style={{
                   backgroundColor: 'var(--color-ivory)',
                   color: 'var(--color-forest)',
-                  padding: '14px 32px',
+                  padding: '14px 36px',
                   fontSize: '16px',
                   fontWeight: 700,
                   boxShadow: 'var(--shadow-md)'
                 }}
               >
-                <span>Create Free Account</span>
+                <span>Get Started</span>
                 <ArrowRight size={18} />
-              </button>
-
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={handleSignIn}
-                style={{
-                  backgroundColor: 'transparent',
-                  color: 'var(--color-ivory)',
-                  borderColor: 'rgba(255,255,255,0.3)',
-                  padding: '14px 28px',
-                  fontSize: '15px'
-                }}
-              >
-                <LogIn size={16} />
-                <span>Sign In</span>
               </button>
             </div>
           </div>
@@ -485,13 +453,6 @@ export default function LandingPage({ onShowFullscreen }) {
                 style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
               >
                 Get Started
-              </button>
-              <button 
-                type="button" 
-                onClick={handleSignIn} 
-                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-              >
-                Sign In
               </button>
               <button 
                 type="button" 

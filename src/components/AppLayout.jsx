@@ -7,7 +7,6 @@ import {
   Bookmark, 
   Menu, 
   X,
-  LogIn,
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -98,13 +97,9 @@ export default function AppLayout({ savedCount = 0 }) {
                 </button>
               </div>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px', borderLeft: '1px solid var(--color-border)', paddingLeft: '12px' }}>
-                <Link to="/login" className="nav-btn" style={{ padding: '6px 12px', fontSize: '13px' }}>
-                  <LogIn size={15} />
-                  <span>Sign In</span>
-                </Link>
-                <Link to="/signup" className="btn-primary" style={{ padding: '6px 14px', fontSize: '13px' }}>
-                  <span>Sign Up</span>
+              <div style={{ display: 'flex', alignItems: 'center', marginLeft: '8px', borderLeft: '1px solid var(--color-border)', paddingLeft: '12px' }}>
+                <Link to="/signup" className="btn-primary" style={{ padding: '7px 16px', fontSize: '13.5px' }}>
+                  <span>Get Started</span>
                 </Link>
               </div>
             )}
@@ -181,23 +176,14 @@ export default function AppLayout({ savedCount = 0 }) {
                   </button>
                 </div>
               ) : (
-                <div style={{ display: 'flex', gap: '10px', padding: '6px 8px' }}>
-                  <Link
-                    to="/login"
-                    className="nav-btn"
-                    onClick={closeMobile}
-                    style={{ flex: 1, justifyContent: 'center' }}
-                  >
-                    <LogIn size={16} />
-                    <span>Sign In</span>
-                  </Link>
+                <div style={{ padding: '6px 8px' }}>
                   <Link
                     to="/signup"
                     className="btn-primary"
                     onClick={closeMobile}
-                    style={{ flex: 1, justifyContent: 'center', padding: '8px 14px', fontSize: '13.5px' }}
+                    style={{ width: '100%', justifyContent: 'center', padding: '10px 14px', fontSize: '14px' }}
                   >
-                    <span>Sign Up</span>
+                    <span>Get Started</span>
                   </Link>
                 </div>
               )}
