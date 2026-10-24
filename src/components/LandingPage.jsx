@@ -75,12 +75,12 @@ export default function LandingPage({
 
   const handleStart = () => {
     if (onStartApp) onStartApp();
-    else navigate('/app');
+    else navigate('/conversations');
   };
 
   const handleExplore = () => {
     if (onExplore) onExplore();
-    else navigate('/explore');
+    else navigate('/conversations');
   };
 
   const activeScenario = HERO_SCENARIOS[selectedScenarioIndex];
@@ -606,21 +606,28 @@ export default function LandingPage({
                 onClick={handleExplore} 
                 style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
               >
-                Explore Phrases
+                Conversations
               </button>
               <button 
                 type="button" 
-                onClick={handleStart} 
+                onClick={() => navigate('/vocabulary')} 
                 style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
               >
-                Get Started
+                Vocabulary
+              </button>
+              <button 
+                type="button" 
+                onClick={() => navigate('/practice')} 
+                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
+              >
+                Guided Practice
               </button>
             </div>
           </div>
 
           <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', fontSize: '12.5px', color: 'var(--color-charcoal-subtle)' }}>
-            <span>Say it in Kannada. Understand what comes next. Built for residents, students, and travelers.</span>
-            <span>Cryptographic client vault • Zero third-party ad telemetry</span>
+            <span>Kannada for Everyone — Empowering real-world communication across Karnataka.</span>
+            <span>Practical conversations • Everyday vocabulary • Guided speaking practice</span>
           </div>
         </div>
       </footer>
