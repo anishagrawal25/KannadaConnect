@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowRight, 
   Volume2, 
   VolumeX, 
-  Maximize2, 
   MessageSquareReply, 
   ShieldCheck,
   MessageSquare,
@@ -14,6 +13,7 @@ import {
 } from 'lucide-react';
 import { CURATED_PHRASES } from '../data/phrases';
 import { speechService } from '../utils/speech';
+import { useAuth } from '../context/AuthContext';
 
 // Curated live everyday scenarios for interactive hero preview
 const HERO_SCENARIOS = [
@@ -59,13 +59,18 @@ const HERO_SCENARIOS = [
   }
 ];
 
-export default function LandingPage({ onShowFullscreen }) {
+export default function LandingPage() {
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
   const [demoSpeaking, setDemoSpeaking] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const handleGetStarted = () => {
-    navigate('/signup');
+    if (isAuthenticated) {
+      navigate('/conversations');
+    } else {
+      navigate('/signup');
+    }
   };
 
   const activeScenario = HERO_SCENARIOS[selectedScenarioIndex];
@@ -229,25 +234,17 @@ export default function LandingPage({ onShowFullscreen }) {
 
               {/* Preview Action Buttons */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '18px', paddingTop: '14px', borderTop: '1px solid var(--color-border)', flexWrap: 'wrap', gap: '10px' }}>
-                {onShowFullscreen && (
-                  <button
-                    type="button"
-                    className="btn-outline-forest"
-                    onClick={() => onShowFullscreen(activePhrase)}
-                    style={{ fontSize: '13px', padding: '7px 14px' }}
-                  >
-                    <Maximize2 size={14} />
-                    <span>Test Full-Screen Show Mode</span>
-                  </button>
-                )}
+                <span style={{ fontSize: '12.5px', color: 'var(--color-charcoal-subtle)' }}>
+                  Interactive Show Mode and speech practice available in your learning workspace
+                </span>
 
                 <button
                   type="button"
                   className="btn-primary"
                   onClick={handleGetStarted}
-                  style={{ fontSize: '13px', padding: '7px 18px', marginLeft: 'auto' }}
+                  style={{ fontSize: '13px', padding: '8px 20px', marginLeft: 'auto' }}
                 >
-                  <span>Sign Up to Practice</span>
+                  <span>{isAuthenticated ? 'Open Workspace' : 'Sign Up to Practice'}</span>
                   <ArrowRight size={14} />
                 </button>
               </div>
@@ -447,34 +444,24 @@ export default function LandingPage({ onShowFullscreen }) {
             </div>
 
             <div style={{ display: 'flex', gap: '20px', fontSize: '13.5px', alignItems: 'center' }}>
-              <button 
-                type="button" 
-                onClick={handleGetStarted} 
-                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
+              <a 
+                href="#how-it-works"
+                style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}
               >
-                Get Started
-              </button>
-              <button 
-                type="button" 
-                onClick={() => navigate('/conversations')} 
-                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-              >
-                Conversations
-              </button>
-              <button 
-                type="button" 
-                onClick={() => navigate('/vocabulary')} 
-                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-              >
-                Vocabulary
-              </button>
-              <button 
-                type="button" 
-                onClick={() => navigate('/practice')} 
-                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-              >
-                Guided Practice
-              </button>
+                How It Works
+              </a>
+              {isAuthenticated ? (
+                <>
+                  <Link to="/conversations" style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}>Conversations</Link>
+                  <Link to="/vocabulary" style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}>Vocabulary</Link>
+                  <Link to="/practice" style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}>Guided Practice</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}>Sign In</Link>
+                  <Link to="/signup" style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}>Get Started</Link>
+                </>
+              )}
             </div>
           </div>
 
