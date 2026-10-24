@@ -135,6 +135,17 @@ export default function GuidedPractice() {
     });
   };
 
+  // Self-evaluation mode (practice speaking aloud and comparing rhythm)
+  const handleSelfCheck = () => {
+    if (isListening) handleStopListening();
+    setSpeechError(null);
+    setPracticeFeedback({
+      status: 'success',
+      assessment: 'Self-check complete! Compare your rhythm and cadence against the native audio pronunciation above.',
+      tips: `Pay attention to the syllable breaks: ${scenario.pronunciationGuide}. Repeat 2–3 times until comfortable.`
+    });
+  };
+
   // Reset practice for current scenario
   const handleReset = () => {
     if (isListening) handleStopListening();
@@ -301,6 +312,16 @@ export default function GuidedPractice() {
               >
                 {isListening ? <MicOff size={18} /> : <Mic size={18} />}
                 <span>{isListening ? 'Stop Speaking' : 'Try Saying It Aloud'}</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleSelfCheck}
+                title="Practice without microphone"
+                style={{ padding: '12px 18px', fontSize: '14px' }}
+              >
+                <span>Self-Check Practice</span>
               </button>
 
               <button

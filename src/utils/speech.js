@@ -43,7 +43,7 @@ class SpeechService {
     return !!this.synth;
   }
 
-  speak(text, onEndCallback = null, onErrorCallback = null) {
+  speak(text, onEndCallback = null, onErrorCallback = null, options = {}) {
     if (!this.synth) {
       if (onErrorCallback) {
         onErrorCallback({

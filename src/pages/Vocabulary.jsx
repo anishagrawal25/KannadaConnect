@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   Volume2, 
@@ -26,6 +26,10 @@ export default function Vocabulary() {
   const [copiedId, setCopiedId] = useState(null);
   const [savedWords, setSavedWords] = useState(() => getSavedWords());
   const [showSavedOnly, setShowSavedOnly] = useState(false);
+
+  useEffect(() => {
+    setSavedWords(getSavedWords());
+  }, []);
 
   const getCategoryIcon = (iconName) => {
     switch (iconName) {

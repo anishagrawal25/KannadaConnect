@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Bookmark, 
   Trash2, 
@@ -27,6 +27,10 @@ export default function SavedPhrases({
   const [speakingId, setSpeakingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setSavedWords(getSavedWords());
+  }, []);
 
   const handleCopy = async (kannadaText, id) => {
     try {
