@@ -13,8 +13,8 @@ export default function AppSaved({ savedPhrases, onRemove }) {
         savedPhrases={savedPhrases}
         onRemove={onRemove}
         onShowFullscreen={(phrase) => setShowModePhrase(phrase)}
-        onNavigateHome={() => navigate('/app')}
-        onNavigateExplore={() => navigate('/app/explore')}
+        onNavigateHome={() => navigate('/conversations')}
+        onNavigateExplore={() => navigate('/conversations')}
       />
 
       {showModePhrase && (
