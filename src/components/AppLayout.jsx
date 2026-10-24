@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
   MessageSquare, 
   BookOpen, 
@@ -14,7 +14,13 @@ import { useAuth } from '../context/AuthContext';
 export default function AppLayout({ savedCount = 0 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, signOut, isAuthenticated } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/', { replace: true });
+  };
 
   const isActive = (path) => {
     if (path === '/conversations') {
@@ -87,7 +93,7 @@ export default function AppLayout({ savedCount = 0 }) {
                 </div>
                 <button
                   type="button"
-                  onClick={() => signOut()}
+                  onClick={handleSignOut}
                   className="nav-btn"
                   style={{ padding: '6px 10px', fontSize: '13px' }}
                   title="Sign Out"
@@ -167,7 +173,7 @@ export default function AppLayout({ savedCount = 0 }) {
                   </div>
                   <button
                     type="button"
-                    onClick={() => { signOut(); closeMobile(); }}
+                    onClick={() => { closeMobile(); handleSignOut(); }}
                     className="nav-btn"
                     style={{ padding: '6px 10px', fontSize: '12px' }}
                   >
