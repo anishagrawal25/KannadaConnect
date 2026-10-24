@@ -12,7 +12,10 @@ export async function generateKannadaPhrase({ intent, situation = 'all', isAlter
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
-    const response = await fetch('/api/generate', {
+    const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+    const apiUrl = `${apiBase}/api/generate`;
+
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
