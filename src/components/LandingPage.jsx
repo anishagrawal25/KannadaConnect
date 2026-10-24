@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, 
-  Sparkles, 
-  Compass, 
   Volume2, 
   VolumeX, 
   Maximize2, 
-  Bookmark, 
   MessageSquareReply, 
   ShieldCheck,
-  Check,
-  Copy
+  MessageSquare,
+  BookOpen,
+  Mic,
+  LogIn,
+  CheckCircle2
 } from 'lucide-react';
-import { CURATED_PHRASES, SITUATIONS } from '../data/phrases';
+import { CURATED_PHRASES } from '../data/phrases';
 import { speechService } from '../utils/speech';
 
 // Curated live everyday scenarios for interactive hero preview
@@ -23,7 +23,7 @@ const HERO_SCENARIOS = [
     icon: '🚌',
     tabLabel: 'Bus Route',
     situationName: 'Transport & Directions',
-    userPrompt: 'I need to check if this bus goes to Mysuru',
+    userPrompt: 'I need to ask whether this bus goes to Mysuru',
     phrase: CURATED_PHRASES.find(p => p.id === 'trans-01') || CURATED_PHRASES[0]
   },
   {
@@ -60,27 +60,17 @@ const HERO_SCENARIOS = [
   }
 ];
 
-export default function LandingPage({ 
-  onStartApp, 
-  onExplore, 
-  onShowFullscreen 
-}) {
+export default function LandingPage({ onShowFullscreen }) {
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
   const [demoSpeaking, setDemoSpeaking] = useState(false);
-  const [previewSpeakingId, setPreviewSpeakingId] = useState(null);
-  const [copiedId, setCopiedId] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  
   const navigate = useNavigate();
 
-  const handleStart = () => {
-    if (onStartApp) onStartApp();
-    else navigate('/conversations');
+  const handleGetStarted = () => {
+    navigate('/signup');
   };
 
-  const handleExplore = () => {
-    if (onExplore) onExplore();
-    else navigate('/conversations');
+  const handleSignIn = () => {
+    navigate('/login');
   };
 
   const activeScenario = HERO_SCENARIOS[selectedScenarioIndex];
@@ -101,7 +91,6 @@ export default function LandingPage({
     );
   };
 
-  // Switch active scenario
   const handleSelectScenario = (index) => {
     if (demoSpeaking) {
       speechService.stop();
@@ -110,63 +99,32 @@ export default function LandingPage({
     setSelectedScenarioIndex(index);
   };
 
-  // Audio handler for curated preview cards
-  const handlePreviewSpeak = (phrase) => {
-    if (previewSpeakingId === phrase.id) {
-      speechService.stop();
-      setPreviewSpeakingId(null);
-      return;
-    }
-    setPreviewSpeakingId(phrase.id);
-    speechService.speak(
-      phrase.kannada,
-      () => setPreviewSpeakingId(null),
-      () => setPreviewSpeakingId(null)
-    );
-  };
-
-  // Copy handler
-  const handleCopyPhrase = async (phrase) => {
-    try {
-      await navigator.clipboard.writeText(phrase.kannada);
-      setCopiedId(phrase.id);
-      setTimeout(() => setCopiedId(null), 2000);
-    } catch {
-      setCopiedId(null);
-    }
-  };
-
-  // Filter curated phrases for interactive explorer section
-  const filteredPhrases = selectedCategory === 'all'
-    ? CURATED_PHRASES.slice(0, 6)
-    : CURATED_PHRASES.filter(p => p.situation === selectedCategory).slice(0, 6);
-
   return (
     <div className="landing-page">
       {/* 1. HERO SECTION */}
-      <section className="landing-hero-section">
+      <section className="landing-hero-section" style={{ paddingBottom: '32px' }}>
         <div className="container">
           <div className="hero-badge-pill">
             <span style={{ fontFamily: 'var(--font-kannada)', fontWeight: 800, fontSize: '15px' }}>ಕ</span>
-            <span>Real-World Communication Assistant for Karnataka</span>
+            <span>Kannada for Everyone • Practical Communication for Karnataka</span>
           </div>
 
           <h1 className="landing-headline">
-            A little Kannada<br />goes a long way.
+            Learn practical Kannada<br />for everyday life.
           </h1>
 
           <p className="landing-subhead">
-            Find the words you need for everyday conversations across Karnataka. Say it, show it, and understand what comes next.
+            Communicate with confidence when talking to bus conductors, auto drivers, shopkeepers, and doctors. Master authentic conversations, explore everyday vocabulary, and practice speaking aloud.
           </p>
 
-          {/* Primary CTA Group */}
-          <div className="landing-cta-group">
+          {/* Clean Primary CTA Group: Get Started -> Sign Up, Sign In -> Login */}
+          <div className="landing-cta-group" style={{ marginBottom: '14px' }}>
             <button
               type="button"
               className="btn-primary"
-              onClick={handleStart}
+              onClick={handleGetStarted}
               id="landing-hero-getstarted-btn"
-              style={{ padding: '13px 28px', fontSize: '16px', borderRadius: 'var(--radius-md)' }}
+              style={{ padding: '14px 32px', fontSize: '16px', borderRadius: 'var(--radius-md)' }}
             >
               <span>Get Started</span>
               <ArrowRight size={18} />
@@ -175,20 +133,24 @@ export default function LandingPage({
             <button
               type="button"
               className="btn-secondary"
-              onClick={handleExplore}
-              id="landing-hero-explore-btn"
-              style={{ padding: '13px 24px', fontSize: '15px', borderRadius: 'var(--radius-md)' }}
+              onClick={handleSignIn}
+              id="landing-hero-signin-btn"
+              style={{ padding: '14px 28px', fontSize: '15px', borderRadius: 'var(--radius-md)' }}
             >
-              <Compass size={17} />
-              <span>Explore Phrases</span>
+              <LogIn size={17} />
+              <span>Sign In</span>
             </button>
           </div>
 
-          {/* REALISTIC INTERACTIVE PRODUCT PREVIEW WITH LIVE SCENARIOS */}
-          <div className="landing-preview-container">
+          <div style={{ fontSize: '13px', color: 'var(--color-charcoal-subtle)', marginBottom: '36px' }}>
+            Free account • Immediate access to Conversations, Vocabulary & Guided Practice
+          </div>
+
+          {/* 2. REALISTIC INTERACTIVE PRODUCT PREVIEW */}
+          <div className="landing-preview-container" style={{ marginTop: '0' }}>
             <div style={{ textAlign: 'center', marginBottom: '12px' }}>
               <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-charcoal-subtle)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Try everyday situations live:
+                Preview everyday situations in action:
               </span>
             </div>
 
@@ -214,7 +176,7 @@ export default function LandingPage({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span className="badge-source curated">
                     <ShieldCheck size={13} />
-                    <span>Interactive Live Preview</span>
+                    <span>Real-Life Situation</span>
                   </span>
                   <span style={{ fontSize: '12px', color: 'var(--color-charcoal-subtle)', fontWeight: 500 }}>
                     • {activeScenario.situationName}
@@ -298,10 +260,10 @@ export default function LandingPage({
                 <button
                   type="button"
                   className="btn-primary"
-                  onClick={handleStart}
-                  style={{ fontSize: '13px', padding: '7px 16px', marginLeft: 'auto' }}
+                  onClick={handleGetStarted}
+                  style={{ fontSize: '13px', padding: '7px 18px', marginLeft: 'auto' }}
                 >
-                  <span>Launch in App</span>
+                  <span>Sign Up to Practice</span>
                   <ArrowRight size={14} />
                 </button>
               </div>
@@ -311,7 +273,7 @@ export default function LandingPage({
                 <div style={{ marginTop: '18px', padding: '14px', backgroundColor: 'var(--color-sand-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
                   <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-forest)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <MessageSquareReply size={14} />
-                    <span>What they might say next (Plausible replies):</span>
+                    <span>What they might say next (Predicted replies):</span>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
                     {activePhrase.replies.slice(0, 2).map((rep, idx) => (
@@ -328,260 +290,186 @@ export default function LandingPage({
         </div>
       </section>
 
-      {/* 2. HOW IT WORKS (3 CONCISE STEPS) */}
-      <section className="landing-section" id="how-it-works">
+      {/* 3. THE THREE CORE LEARNING PILLARS */}
+      <section className="landing-section" style={{ backgroundColor: 'var(--color-white)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container">
-          <div className="section-label">Simple 3-Step Journey</div>
-          <h2 className="section-heading">How KannadaConnect works</h2>
+          <div className="section-label">Core Learning Experience</div>
+          <h2 className="section-heading">Three practical ways to master everyday Kannada</h2>
           <p className="section-description">
-            Designed specifically for real interactions on foot, in transit, at shops, or at dining tables.
+            Focused strictly on helping non-Kannada speakers communicate confidently in realistic situations.
           </p>
 
-          <div className="steps-grid">
-            <div className="step-card">
-              <div className="step-number">1</div>
-              <h3 className="step-title">Describe what you need</h3>
-              <p className="step-body">
-                Type naturally in English or tap the microphone to speak. Choose your everyday situation (Transport, Food, Shopping, Health) for instant context.
-              </p>
-              <div className="step-badge">English Intent → Voice or Text</div>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">2</div>
-              <h3 className="step-title">Get a useful Kannada phrase</h3>
-              <p className="step-body">
-                Receive authentic Kannada script, Romanized phonetic transliteration, syllable pronunciation cadence, and local cultural etiquette tips.
-              </p>
-              <div className="step-badge">ಕನ್ನಡ Script + Phonetics</div>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">3</div>
-              <h3 className="step-title">Listen, show it, & understand</h3>
-              <p className="step-body">
-                Play pronunciation audio, launch high-contrast Show Mode to display to vendors across counters, and read predicted replies so you know what comes next.
-              </p>
-              <div className="step-badge">Show Mode + Predicted Replies</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. WORKING FEATURES GRID */}
-      <section className="landing-section" id="features">
-        <div className="container">
-          <div className="section-label">Product Capabilities</div>
-          <h2 className="section-heading">Built for real-world confidence</h2>
-          <p className="section-description">
-            Every feature is functional, practical, and designed to help you communicate immediately.
-          </p>
-
-          <div className="features-grid">
-            <div className="feature-item">
-              <div className="feature-icon-box">
-                <Sparkles size={22} />
-              </div>
-              <h3 className="feature-title">AI-Assisted Show & Say</h3>
-              <p className="feature-body">
-                Powered by Google Gemini to translate natural English communication intents into situational Kannada, backed by an offline reviewed library.
-              </p>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon-box">
-                <MessageSquareReply size={22} />
-              </div>
-              <h3 className="feature-title">Contextual Possible Replies</h3>
-              <p className="feature-body">
-                Never get caught off guard: see the most common responses a conductor, driver, or shopkeeper might give in Kannada with English meanings.
-              </p>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon-box">
-                <Compass size={22} />
-              </div>
-              <h3 className="feature-title">Situation-Based Phrasebook</h3>
-              <p className="feature-body">
-                Curated phrases covering Transport, Food & Coffee, Shopping & UPI, Healthcare, and Everyday social conversations with instant multi-field search.
-              </p>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon-box">
-                <Volume2 size={22} />
-              </div>
-              <h3 className="feature-title">Pronunciation Support</h3>
-              <p className="feature-body">
-                Microphone speech-to-text input in English plus audio pronunciation with syllable cadence breaks and browser Kannada voice detection.
-              </p>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon-box">
-                <Maximize2 size={22} />
-              </div>
-              <h3 className="feature-title">Full-Screen Show Mode</h3>
-              <p className="feature-body">
-                A distraction-free, large-type presentation screen built to show conductors, auto drivers, and shopkeepers across counters with Daylight and OLED Night contrast.
-              </p>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon-box">
-                <Bookmark size={22} />
-              </div>
-              <h3 className="feature-title">Saved Offline Phrases</h3>
-              <p className="feature-body">
-                Bookmark phrases for fast offline access. Stored securely in your browser's local sandbox without requiring third-party cloud trackers.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. CURATED PHRASE PREVIEW SECTION WITH CATEGORY FILTER */}
-      <section className="landing-section" id="phrase-samples">
-        <div className="container">
-          <div className="section-label">Reviewed Library</div>
-          <h2 className="section-heading">Everyday situations, solved</h2>
-          <p className="section-description">
-            Explore authentic phrases from the reviewed KannadaConnect collection. Tap Listen to hear pronunciation or test Show Mode:
-          </p>
-
-          {/* Category Filter Pills */}
-          <div className="landing-category-pills">
-            {SITUATIONS.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                className={`scenario-pill-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat.id)}
-              >
-                <span>{cat.label}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="phrase-grid">
-            {filteredPhrases.map((p) => {
-              const isPlaying = previewSpeakingId === p.id;
-              const isCopied = copiedId === p.id;
-
-              return (
-                <div key={p.id} className="phrase-card">
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-charcoal-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                        {p.situationLabel}
-                      </span>
-                      <span className="badge-source curated" style={{ fontSize: '10.5px' }}>Reviewed</span>
-                    </div>
-
-                    <div className="kannada-text" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--color-forest-dark)', lineHeight: 1.35, marginBottom: '6px' }}>
-                      {p.kannada}
-                    </div>
-
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-charcoal)', marginBottom: '4px' }}>
-                      "{p.transliteration}"
-                    </div>
-
-                    <div style={{ fontSize: '13.5px', color: 'var(--color-charcoal-muted)' }}>
-                      {p.english}
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', paddingTop: '12px', marginTop: '12px' }}>
-                    {onShowFullscreen ? (
-                      <button
-                        type="button"
-                        className="btn-outline-forest"
-                        onClick={() => onShowFullscreen(p)}
-                        style={{ padding: '6px 12px', fontSize: '12.5px' }}
-                      >
-                        <Maximize2 size={13} />
-                        <span>Show Large</span>
-                      </button>
-                    ) : (
-                      <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 600 }}>Reviewed</span>
-                    )}
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <button
-                        type="button"
-                        className="btn-icon-xs"
-                        onClick={() => handleCopyPhrase(p)}
-                        title={isCopied ? "Copied" : "Copy Kannada script"}
-                      >
-                        {isCopied ? <Check size={14} color="var(--color-forest)" /> : <Copy size={14} />}
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btn-icon-xs"
-                        onClick={() => handlePreviewSpeak(p)}
-                        title={isPlaying ? "Stop audio" : "Listen to pronunciation"}
-                        style={{
-                          backgroundColor: isPlaying ? 'var(--color-terracotta-light)' : 'transparent',
-                          borderColor: isPlaying ? 'var(--color-terracotta)' : 'var(--color-border)'
-                        }}
-                      >
-                        {isPlaying ? <VolumeX size={14} color="var(--color-terracotta)" /> : <Volume2 size={14} />}
-                      </button>
-                    </div>
-                  </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginTop: '36px' }}>
+            {/* Pillar 1: Everyday Conversations */}
+            <div style={{ padding: '28px', backgroundColor: 'var(--color-warm-ivory)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '44px', height: '44px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-forest-light)', color: 'var(--color-forest)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <MessageSquare size={22} />
                 </div>
-              );
-            })}
-          </div>
+                <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '8px', color: 'var(--color-charcoal)' }}>
+                  Everyday Conversations
+                </h3>
+                <p style={{ fontSize: '14px', color: 'var(--color-charcoal-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
+                  Communicate in realistic situations: buses, autos, restaurants, and pharmacy. Shows Kannada script, phonetic transliteration, audio, and predicted replies so you know what they might say back.
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--color-charcoal)' }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>English intent to authentic Kannada</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>High-contrast full-screen Show Mode</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Contextual etiquette & polite suffixes</span>
+                  </li>
+                </ul>
+              </div>
 
-          <div style={{ textAlign: 'center', marginTop: '36px' }}>
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={handleExplore}
-              style={{ padding: '10px 24px', fontSize: '14.5px' }}
-            >
-              <span>View All 25+ Curated Phrases</span>
-              <ArrowRight size={16} />
-            </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleGetStarted}
+                style={{ width: '100%', justifyContent: 'center', padding: '10px' }}
+              >
+                <span>Get Started</span>
+                <ArrowRight size={15} />
+              </button>
+            </div>
+
+            {/* Pillar 2: Practical Vocabulary */}
+            <div style={{ padding: '28px', backgroundColor: 'var(--color-warm-ivory)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '44px', height: '44px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-forest-light)', color: 'var(--color-forest)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <BookOpen size={22} />
+                </div>
+                <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '8px', color: 'var(--color-charcoal)' }}>
+                  Practical Vocabulary
+                </h3>
+                <p style={{ fontSize: '14px', color: 'var(--color-charcoal-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
+                  A focused library of words you actually need in everyday life. Curated across Transport, Food, Shopping, Health, and Everyday Life with audio and bookmarking.
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--color-charcoal)' }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Kannada script + English transliteration</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Real-world example sentences</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Bookmark words for fast offline revision</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleGetStarted}
+                style={{ width: '100%', justifyContent: 'center', padding: '10px' }}
+              >
+                <span>Get Started</span>
+                <ArrowRight size={15} />
+              </button>
+            </div>
+
+            {/* Pillar 3: Guided Practice */}
+            <div style={{ padding: '28px', backgroundColor: 'var(--color-warm-ivory)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '44px', height: '44px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-forest-light)', color: 'var(--color-forest)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <Mic size={22} />
+                </div>
+                <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '8px', color: 'var(--color-charcoal)' }}>
+                  Guided Practice
+                </h3>
+                <p style={{ fontSize: '14px', color: 'var(--color-charcoal-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
+                  Step into real-life scenarios, see what you need to express, and practice saying it aloud. Get honest feedback using Kannada speech recognition and pronunciation cadence.
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--color-charcoal)' }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Realistic situational speaking challenges</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Objective analysis without fake scores</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={15} color="var(--color-forest)" />
+                    <span>Self-Check fallback for all browsers</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleGetStarted}
+                style={{ width: '100%', justifyContent: 'center', padding: '10px' }}
+              >
+                <span>Get Started</span>
+                <ArrowRight size={15} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 5. CLOSING CTA BANNER */}
-      <section className="container">
+      {/* 4. CLOSING CTA BANNER */}
+      <section className="container" style={{ padding: '48px 20px' }}>
         <div className="landing-closing-cta">
           <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-ivory)', letterSpacing: '-0.02em', marginBottom: '12px' }}>
               Start speaking Kannada today.
             </h2>
             <p style={{ fontSize: '16px', color: 'var(--color-sage)', marginBottom: '28px', lineHeight: 1.55 }}>
-              Find the words you need for everyday conversations across Karnataka. Say it, show it, and understand what comes next.
+              Join KannadaConnect to learn practical everyday expressions, vocabulary, and guided practice for real-world interactions.
             </p>
 
-            <button
-              type="button"
-              className="btn-primary"
-              onClick={handleStart}
-              style={{
-                backgroundColor: 'var(--color-ivory)',
-                color: 'var(--color-forest)',
-                padding: '14px 32px',
-                fontSize: '16px',
-                fontWeight: 700,
-                boxShadow: 'var(--shadow-md)'
-              }}
-            >
-              <span>Get Started with KannadaConnect</span>
-              <ArrowRight size={18} />
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={handleGetStarted}
+                style={{
+                  backgroundColor: 'var(--color-ivory)',
+                  color: 'var(--color-forest)',
+                  padding: '14px 32px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  boxShadow: 'var(--shadow-md)'
+                }}
+              >
+                <span>Create Free Account</span>
+                <ArrowRight size={18} />
+              </button>
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleSignIn}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: 'var(--color-ivory)',
+                  borderColor: 'rgba(255,255,255,0.3)',
+                  padding: '14px 28px',
+                  fontSize: '15px'
+                }}
+              >
+                <LogIn size={16} />
+                <span>Sign In</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 6. LANDING FOOTER */}
+      {/* 5. MINIMAL LANDING FOOTER */}
       <footer className="landing-footer">
         <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
@@ -590,20 +478,24 @@ export default function LandingPage({
               <span style={{ fontWeight: 800, fontSize: '17px', color: 'var(--color-charcoal)' }}>KannadaConnect</span>
             </div>
 
-            <div style={{ display: 'flex', gap: '20px', fontSize: '13.5px' }}>
-              <a 
-                href="#how-it-works"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
-                }} 
-                style={{ color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}
-              >
-                How It Works
-              </a>
+            <div style={{ display: 'flex', gap: '20px', fontSize: '13.5px', alignItems: 'center' }}>
               <button 
                 type="button" 
-                onClick={handleExplore} 
+                onClick={handleGetStarted} 
+                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
+              >
+                Get Started
+              </button>
+              <button 
+                type="button" 
+                onClick={handleSignIn} 
+                style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
+              >
+                Sign In
+              </button>
+              <button 
+                type="button" 
+                onClick={() => navigate('/conversations')} 
                 style={{ background: 'none', border: 'none', color: 'var(--color-forest)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
               >
                 Conversations
@@ -626,8 +518,8 @@ export default function LandingPage({
           </div>
 
           <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', fontSize: '12.5px', color: 'var(--color-charcoal-subtle)' }}>
-            <span>Kannada for Everyone — Empowering real-world communication across Karnataka.</span>
-            <span>Practical conversations • Everyday vocabulary • Guided speaking practice</span>
+            <span>Kannada for Everyone — Practical Kannada for everyday communication across Karnataka.</span>
+            <span>Everyday conversations • Practical vocabulary • Guided speaking practice</span>
           </div>
         </div>
       </footer>
