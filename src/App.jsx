@@ -11,6 +11,11 @@ import Vocabulary from './pages/Vocabulary';
 import GuidedPractice from './pages/GuidedPractice';
 import AppSaved from './pages/AppSaved';
 
+// Auth Context & Auth Pages
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+
 // Global Overlays & Storage Utilities
 import ShowMode from './components/ShowMode';
 import { getSavedPhrases, savePhrase, removeSavedPhrase, isPhraseSaved } from './utils/storage';
@@ -50,84 +55,90 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<AppLayout savedCount={savedPhrases.length} />}>
-          {/* Landing / Overview */}
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                onShowFullscreen={(phrase) => setShowModePhrase(phrase)}
-              />
-            }
-          />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Authentication Pages */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
 
-          {/* Core Feature A: Everyday Kannada Conversations */}
-          <Route
-            path="/conversations"
-            element={
-              <SayAndShow
-                onToggleSave={handleToggleSave}
-                savedPhrases={savedPhrases}
-                showToast={showToast}
-              />
-            }
-          />
-          {/* Backward compatibility route */}
-          <Route
-            path="/app"
-            element={<Navigate to="/conversations" replace />}
-          />
+          <Route element={<AppLayout savedCount={savedPhrases.length} />}>
+            {/* Landing / Overview */}
+            <Route
+              path="/"
+              element={
+                <LandingPage
+                  onShowFullscreen={(phrase) => setShowModePhrase(phrase)}
+                />
+              }
+            />
 
-          {/* Core Feature B: Practical Vocabulary */}
-          <Route
-            path="/vocabulary"
-            element={<Vocabulary />}
+            {/* Core Feature A: Everyday Kannada Conversations */}
+            <Route
+              path="/conversations"
+              element={
+                <SayAndShow
+                  onToggleSave={handleToggleSave}
+                  savedPhrases={savedPhrases}
+                  showToast={showToast}
+                />
+              }
+            />
+            {/* Backward compatibility route */}
+            <Route
+              path="/app"
+              element={<Navigate to="/conversations" replace />}
+            />
+
+            {/* Core Feature B: Practical Vocabulary */}
+            <Route
+              path="/vocabulary"
+              element={<Vocabulary />}
+            />
+
+            {/* Core Feature C: Guided Speaking Practice */}
+            <Route
+              path="/practice"
+              element={<GuidedPractice />}
+            />
+
+            {/* Saved Collection for revision */}
+            <Route
+              path="/saved"
+              element={
+                <AppSaved
+                  savedPhrases={savedPhrases}
+                  onRemove={handleToggleSave}
+                />
+              }
+            />
+            {/* Backward compatibility */}
+            <Route
+              path="/app/saved"
+              element={<Navigate to="/saved" replace />}
+            />
+          </Route>
+
+          {/* Catch-all redirect */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+
+        {/* Fullscreen Show Mode Modal */}
+        {showModePhrase && (
+          <ShowMode
+            phrase={showModePhrase}
+            onClose={() => setShowModePhrase(null)}
           />
+        )}
 
-          {/* Core Feature C: Guided Speaking Practice */}
-          <Route
-            path="/practice"
-            element={<GuidedPractice />}
-          />
-
-          {/* Saved Collection for revision */}
-          <Route
-            path="/saved"
-            element={
-              <AppSaved
-                savedPhrases={savedPhrases}
-                onRemove={handleToggleSave}
-              />
-            }
-          />
-          {/* Backward compatibility */}
-          <Route
-            path="/app/saved"
-            element={<Navigate to="/saved" replace />}
-          />
-        </Route>
-
-        {/* Catch-all redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-
-      {/* Fullscreen Show Mode Modal */}
-      {showModePhrase && (
-        <ShowMode
-          phrase={showModePhrase}
-          onClose={() => setShowModePhrase(null)}
-        />
-      )}
-
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="toast-notice" role="alert">
-          <Sparkles size={16} color="var(--color-sage)" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-    </BrowserRouter>
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="toast-notice" role="alert">
+            <Sparkles size={16} color="var(--color-sage)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

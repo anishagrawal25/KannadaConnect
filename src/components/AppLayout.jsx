@@ -6,12 +6,16 @@ import {
   Mic, 
   Bookmark, 
   Menu, 
-  X 
+  X,
+  LogIn,
+  LogOut
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function AppLayout({ savedCount = 0 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut, isAuthenticated } = useAuth();
 
   const isActive = (path) => {
     if (path === '/conversations') {
@@ -75,6 +79,35 @@ export default function AppLayout({ savedCount = 0 }) {
               <span>Saved</span>
               {savedCount > 0 && <span className="nav-badge">{savedCount}</span>}
             </Link>
+
+            {/* Auth Controls */}
+            {isAuthenticated ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px', borderLeft: '1px solid var(--color-border)', paddingLeft: '12px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'var(--color-forest)', color: 'var(--color-ivory)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700 }} title={user?.email}>
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="nav-btn"
+                  style={{ padding: '6px 10px', fontSize: '13px' }}
+                  title="Sign Out"
+                >
+                  <LogOut size={15} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px', borderLeft: '1px solid var(--color-border)', paddingLeft: '12px' }}>
+                <Link to="/login" className="nav-btn" style={{ padding: '6px 12px', fontSize: '13px' }}>
+                  <LogIn size={15} />
+                  <span>Sign In</span>
+                </Link>
+                <Link to="/signup" className="btn-primary" style={{ padding: '6px 14px', fontSize: '13px' }}>
+                  <span>Sign Up</span>
+                </Link>
+              </div>
+            )}
           </nav>
 
           {/* Mobile Hamburger Toggle */}
@@ -127,6 +160,48 @@ export default function AppLayout({ savedCount = 0 }) {
               <span>Saved</span>
               {savedCount > 0 && <span className="nav-badge" style={{ marginLeft: '6px' }}>{savedCount}</span>}
             </Link>
+
+            <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '12px', marginTop: '6px' }}>
+              {isAuthenticated ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'var(--color-forest)', color: 'var(--color-ivory)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700 }}>
+                      {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <span style={{ fontSize: '13.5px', fontWeight: 600 }}>{user?.name || user?.email}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { signOut(); closeMobile(); }}
+                    className="nav-btn"
+                    style={{ padding: '6px 10px', fontSize: '12px' }}
+                  >
+                    <LogOut size={14} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', gap: '10px', padding: '6px 8px' }}>
+                  <Link
+                    to="/login"
+                    className="nav-btn"
+                    onClick={closeMobile}
+                    style={{ flex: 1, justifyContent: 'center' }}
+                  >
+                    <LogIn size={16} />
+                    <span>Sign In</span>
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="btn-primary"
+                    onClick={closeMobile}
+                    style={{ flex: 1, justifyContent: 'center', padding: '8px 14px', fontSize: '13.5px' }}
+                  >
+                    <span>Sign Up</span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </header>
