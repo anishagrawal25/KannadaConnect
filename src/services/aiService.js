@@ -59,7 +59,7 @@ function getCuratedFallback(intent, situation, reasonCode) {
   if (match) {
     let note = match.contextNote || '';
     if (reasonCode === 'API_KEY_MISSING') {
-      note = (note ? note + ' • ' : '') + 'Loaded from reviewed phrasebook (Configure GEMINI_API_KEY in .env for custom dynamic translations).';
+      note = (note ? note + ' • ' : '') + 'Verified phrasebook match. (Add GEMINI_API_KEY in .env for custom AI translations).';
     } else if (reasonCode === 'NETWORK_OFFLINE') {
       note = (note ? note + ' • ' : '') + 'Loaded from offline verified phrasebook.';
     }
@@ -83,10 +83,10 @@ function getCuratedFallback(intent, situation, reasonCode) {
     english: 'Please help me a little.',
     originalIntent: intent,
     verified: true,
-    situation: situation || 'conversation',
+    situation: situation && situation !== 'all' ? situation : 'conversation',
     situationLabel: 'Everyday Conversations',
     isFallback: true,
-    contextNote: 'Loaded emergency assistance phrase from verified offline library.',
+    contextNote: 'No exact offline phrase found for this query. Showing general assistance phrase. (Add GEMINI_API_KEY in .env for custom AI translations of any phrase).',
     replies: [
       {
         kannada: 'ಹೌದು, ಏನು ಸಹಾಯ ಬೇಕು?',

@@ -27,8 +27,9 @@ export default defineConfig(({ mode }) => {
             req.on('end', async () => {
               try {
                 const parsedBody = body ? JSON.parse(body) : {};
-                // Populate process.env for local execution
-                process.env.GEMINI_API_KEY = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+                // Populate process.env for local execution if a real key is present
+                const candidateKey = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+                process.env.GEMINI_API_KEY = (candidateKey && candidateKey !== 'undefined' && candidateKey !== 'your_gemini_api_key_here') ? candidateKey.trim() : '';
 
                 // Import serverless handler dynamically
                 const { default: handler } = await import('./api/generate.js');

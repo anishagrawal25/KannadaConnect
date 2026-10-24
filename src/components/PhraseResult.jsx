@@ -78,7 +78,7 @@ export default function PhraseResult({
               {result.verified ? (
                 <>
                   <ShieldCheck size={13} />
-                  <span>Curated & Reviewed</span>
+                  <span>{result.id === 'fallback-generic' ? 'Offline Assistance' : 'Curated & Reviewed'}</span>
                 </>
               ) : (
                 <>
@@ -98,6 +98,24 @@ export default function PhraseResult({
           <div className="result-original-intent">
             "{result.originalIntent || result.english}"
           </div>
+
+          {result.id === 'fallback-generic' && (
+            <div style={{
+              marginTop: '8px',
+              padding: '6px 10px',
+              backgroundColor: 'var(--color-gold-light)',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '12px',
+              color: 'var(--color-gold)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: '1px solid #E8D39E'
+            }}>
+              <Info size={13} style={{ flexShrink: 0 }} />
+              <span>Exact offline match not found. Showing a general polite Kannada phrase you can use right away.</span>
+            </div>
+          )}
         </div>
 
         {/* Kannada Script Hero Box with Inline Listen Action */}

@@ -129,11 +129,74 @@ export const CURATED_PHRASES = [
     ]
   },
   {
+    id: 'trans-05',
+    situation: 'transport',
+    situationLabel: 'Transport & Directions',
+    english: 'Where is the washroom or toilet?',
+    intentMatch: [
+      'washroom', 'toilet', 'restroom', 'bathroom', 'where is washroom', 
+      'where is toilet', 'find washroom', 'need washroom', 'need toilet', 'loo'
+    ],
+    kannada: 'ವಾಶ್‌ರೂಮ್ ಎಲ್ಲಿದೆ?',
+    transliteration: 'Washroom ellide?',
+    pronunciationGuide: 'WASH-room EL-li-de?',
+    contextNote: 'Widely understood across bus stations, restaurants, metro terminals, and petrol pumps.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ಹಿಂದೆ ಬಲಭಾಗದಲ್ಲಿದೆ.',
+        transliteration: 'Hinde balabhaagadallide.',
+        englishMeaning: 'At the back on the right-hand side.'
+      },
+      {
+        kannada: 'ಮೆಟ್ಟಿಲು ಹತ್ತಿ ಮೇಲ್ಗಡೆ ಇದೆ.',
+        transliteration: 'Mettilu hatti melgade ide.',
+        englishMeaning: 'Go up the stairs, it is on the first floor.'
+      },
+      {
+        kannada: 'ನೇರವಾಗಿ ಹೋಗಿ ಎಡಕ್ಕೆ ತಿರುಗಿ.',
+        transliteration: 'Neravaagi hogi edakke tirugi.',
+        englishMeaning: 'Go straight and turn left.'
+      }
+    ]
+  },
+  {
+    id: 'trans-06',
+    situation: 'transport',
+    situationLabel: 'Transport & Directions',
+    english: 'Please stop the vehicle right here.',
+    intentMatch: [
+      'stop here', 'please stop here', 'stop auto', 'stop bus here', 
+      'drop me here', 'stop car', 'stop vehicle', 'drop here', 'ille nillisi'
+    ],
+    kannada: 'ದಯವಿಟ್ಟು ಇಲ್ಲೇ ನಿಲ್ಲಿಸಿ.',
+    transliteration: 'Dayavittu ille nillisi.',
+    pronunciationGuide: 'da-ya-VIT-tu IL-lay nil-LI-si.',
+    contextNote: 'Say clearly to bus conductors, BMTC drivers near the door, or auto drivers as you reach your stop.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ಸರಿ ಸರ್, ಇಳಿಯಿರಿ.',
+        transliteration: 'Sari sir, iliyiri.',
+        englishMeaning: 'Okay sir, please step down carefully.'
+      },
+      {
+        kannada: 'ಸಿಗ್ನಲ್ ದಾಟಿದ ಮೇಲೆ ನಿಲ್ಲಿಸ್ತೀನಿ.',
+        transliteration: 'Signal daatida mele nillisteeni.',
+        englishMeaning: 'I will stop right after crossing the traffic signal.'
+      }
+    ]
+  },
+  {
     id: 'food-01',
     situation: 'food',
     situationLabel: 'Food & Restaurants',
     english: 'Two filter coffees, less sugar please.',
-    intentMatch: ['two filter coffee less sugar', 'two coffees', 'filter coffee less sugar', 'coffee kam shakkar'],
+    intentMatch: [
+      'coffee', 'i need coffee', 'two filter coffee less sugar', 'two coffees', 
+      'filter coffee less sugar', 'coffee kam shakkar', 'one coffee', 'filter coffee',
+      'give coffee', 'hot coffee', 'kaafi', 'want coffee', 'black coffee'
+    ],
     kannada: 'ಎರಡು ಫಿಲ್ಟರ್ ಕಾಫಿ, ಸಕ್ಕರೆ ಕಡಿಮೆ ಹಾಕಿ ಕೊಡಿ.',
     transliteration: 'Eradu filter coffee, sakkare kadime haaki kodi.',
     pronunciationGuide: 'eh-RA-du FIL-ter KAA-phi, SAK-ka-ray KA-di-may HAA-ki KO-di.',
@@ -162,7 +225,7 @@ export const CURATED_PHRASES = [
     situation: 'food',
     situationLabel: 'Food & Restaurants',
     english: 'What is special here today?',
-    intentMatch: ['what is special today', 'special food', 'recommend food', 'today special in hotel'],
+    intentMatch: ['what is special today', 'special food', 'recommend food', 'today special in hotel', 'today special'],
     kannada: 'ಇವತ್ತು ಇಲ್ಲಿ ಏನು ಸ್ಪೆಷಲ್ ಇದೆ?',
     transliteration: 'Ivattu illi enu special ide?',
     pronunciationGuide: 'ee-VAT-tu IL-li AY-nu SPE-shal EE-de?',
@@ -191,7 +254,10 @@ export const CURATED_PHRASES = [
     situation: 'food',
     situationLabel: 'Food & Restaurants',
     english: 'Please give the bill.',
-    intentMatch: ['give bill', 'restaurant bill', 'check please', 'how much for food bill'],
+    intentMatch: [
+      'bill', 'give bill', 'restaurant bill', 'check please', 'how much for food bill',
+      'bill please', 'the bill', 'check', 'account', 'total bill', 'food bill', 'pay bill'
+    ],
     kannada: 'ದಯವಿಟ್ಟು ಬಿಲ್ ಕೊಡಿ.',
     transliteration: 'Dayavittu bill kodi.',
     pronunciationGuide: 'da-ya-VIT-tu BILL KO-di.',
@@ -212,6 +278,72 @@ export const CURATED_PHRASES = [
         kannada: 'ಕೌಂಟರ್‌ನಲ್ಲಿ ಪೇ ಮಾಡಿ ಸರ್.',
         transliteration: 'Counter-nalli pay maadi sir.',
         englishMeaning: 'Please pay directly at the counter, sir.'
+      }
+    ]
+  },
+  {
+    id: 'food-04',
+    situation: 'food',
+    situationLabel: 'Food & Restaurants',
+    english: 'Please give one cup of tea.',
+    intentMatch: [
+      'tea', 'i need tea', 'need tea', 'give tea', 'one tea', 'chai', 
+      'hot tea', 'tea please', 'cup of tea', 'want tea', 'one cup tea',
+      'chaha', 'chaa', 'kadak chai', 'black tea', 'lemon tea', 'i want tea'
+    ],
+    kannada: 'ದಯವಿಟ್ಟು ಒಂದು ಕಪ್ ಟೀ ಕೊಡಿ.',
+    transliteration: 'Dayavittu ondu cup tea kodi.',
+    pronunciationGuide: 'da-ya-VIT-tu ON-du cup TEE KO-di.',
+    contextNote: 'Standard order at local tea stalls, darshinis, and bakeries across Karnataka.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ಹಾಲು ಜಾಸ್ತಿ ಬೇಕಾ, ಡಿಕಾಕ್ಷನ್ ಜಾಸ್ತಿ ಬೇಕಾ?',
+        transliteration: 'Haalu jaasti bekaa, decoction jaasti bekaa?',
+        englishMeaning: 'Do you want more milk or stronger decoction?'
+      },
+      {
+        kannada: 'ಎರಡು ನಿಮಿಷ ಸರ್, ಬಿಸಿ ಬಿಸಿ ಕೊಡ್ತೀನಿ.',
+        transliteration: 'Eradu nimisha sir, bisi bisi kodteeni.',
+        englishMeaning: 'Two minutes sir, will give it piping hot.'
+      },
+      {
+        kannada: 'ಸಕ್ಕರೆ ಕಡಿಮೆ ಹಾಕ್ಲಾ?',
+        transliteration: 'Sakkare kadime haaklaa?',
+        englishMeaning: 'Shall I put less sugar?'
+      }
+    ]
+  },
+  {
+    id: 'food-05',
+    situation: 'food',
+    situationLabel: 'Food & Restaurants',
+    english: 'Please give drinking water.',
+    intentMatch: [
+      'water', 'drinking water', 'need water', 'i need water', 'give water', 
+      'glass of water', 'water bottle', 'neeru', 'water please', 'bottle of water',
+      'cold water', 'hot water', 'normal water', 'kudiyoke neeru'
+    ],
+    kannada: 'ದಯವಿಟ್ಟು ಕುಡಿಯಲು ನೀರು ಕೊಡಿ.',
+    transliteration: 'Dayavittu kudiyalu neeru kodi.',
+    pronunciationGuide: 'da-ya-VIT-tu ku-di-YA-lu NEE-ru KO-di.',
+    contextNote: 'Polite and understood everywhere—restaurants, hotels, shops, and homes.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ತಣ್ಣೀರು ಬೇಕಾ, ಬಿಸಿ ನೀರು ಬೇಕಾ?',
+        transliteration: 'Tanneeru bekaa, bisi neeru bekaa?',
+        englishMeaning: 'Do you want cold water or warm water?'
+      },
+      {
+        kannada: 'ಬಾಟಲ್ ನೀರು ತರ್ಲಾ ಸರ್?',
+        transliteration: 'Bottle neeru tarlaa sir?',
+        englishMeaning: 'Shall I bring a packaged water bottle, sir?'
+      },
+      {
+        kannada: 'ಇಲ್ಲೇ ಜಗ್ ಇದೆ, ತಗೊಳ್ಳಿ.',
+        transliteration: 'Ille jug ide, tagolli.',
+        englishMeaning: 'The water jug is right here, please take it.'
       }
     ]
   },
@@ -303,6 +435,35 @@ export const CURATED_PHRASES = [
     ]
   },
   {
+    id: 'shop-04',
+    situation: 'shopping',
+    situationLabel: 'Shopping & Payments',
+    english: 'Please give a carry bag or cover.',
+    intentMatch: ['bag', 'cover', 'carry bag', 'carrybag', 'plastic cover', 'cloth bag', 'need a bag', 'give bag', 'cover kodi'],
+    kannada: 'ದಯವಿಟ್ಟು ಒಂದು ಕವರ್ ಕೊಡಿ.',
+    transliteration: 'Dayavittu ondu cover kodi.',
+    pronunciationGuide: 'da-ya-VIT-tu ON-du CO-ver KO-di.',
+    contextNote: 'Shopkeepers throughout Karnataka refer to bags and carry bags as \'cover\'.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ಹತ್ತು ರೂಪಾಯಿ ಎಕ್ಸ್ಟ್ರಾ ಆಗುತ್ತೆ ಸರ್.',
+        transliteration: 'Hattu roopayi extra aagutte sir.',
+        englishMeaning: 'It will be ten rupees extra, sir.'
+      },
+      {
+        kannada: 'ಬಟ್ಟೆ ಬ್ಯಾಗ್ ಇದೆ, ಇಪ್ಪತ್ತು ರೂಪಾಯಿ.',
+        transliteration: 'Batte bag ide, ippattu roopayi.',
+        englishMeaning: 'Cloth bag is available for twenty rupees.'
+      },
+      {
+        kannada: 'ಇಲ್ಲೇ ಇದೆ, ತಗೊಳ್ಳಿ.',
+        transliteration: 'Ille ide, tagolli.',
+        englishMeaning: 'It is right here, please take it.'
+      }
+    ]
+  },
+  {
     id: 'health-01',
     situation: 'health',
     situationLabel: 'Health & Pharmacy',
@@ -357,6 +518,35 @@ export const CURATED_PHRASES = [
         kannada: 'ತಣ್ಣೀರು ಕುಡಿಯಬೇಡಿ, ಬಿಸಿ ನೀರು ಕುಡಿಯಿರಿ.',
         transliteration: 'Tanneeru kudiyabedi, bisi neeru kudiyiri.',
         englishMeaning: 'Do not drink cold water, drink warm water.'
+      }
+    ]
+  },
+  {
+    id: 'health-03',
+    situation: 'health',
+    situationLabel: 'Health & Pharmacy',
+    english: 'Where is the nearest hospital or medical store?',
+    intentMatch: ['hospital', 'nearest hospital', 'where is hospital', 'medical store', 'pharmacy near me', 'clinic', 'doctor', 'doctor clinic'],
+    kannada: 'ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆ ಅಥವಾ ಮೆಡಿಕಲ್ ಶಾಪ್ ಎಲ್ಲಿದೆ?',
+    transliteration: 'Hathirada aaspathre athava medical shop ellide?',
+    pronunciationGuide: 'HAT-ti-ra-da aas-PAT-ray a-tha-va ME-di-cal shop EL-li-de?',
+    contextNote: 'Crucial emergency query understood by any local resident or traffic police.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ಮುಂದಿನ ಸಿಗ್ನಲ್ ಹತ್ತಿರ ದೊಡ್ಡ ಆಸ್ಪತ್ರೆ ಇದೆ.',
+        transliteration: 'Mundina signal hathira dodda aaspathre ide.',
+        englishMeaning: 'There is a big hospital near the next traffic signal.'
+      },
+      {
+        kannada: 'ಎರಡು ನಿಮಿಷ ನಡೀರಿ, ಬಲಭಾಗದಲ್ಲೇ ಮೆಡಿಕಲ್ ಶಾಪ್ ಇದೆ.',
+        transliteration: 'Eradu nimisha nadeeri, balabhaagadalle medical shop ide.',
+        englishMeaning: 'Walk for two minutes, the medical shop is on the right side.'
+      },
+      {
+        kannada: 'ಆಂಬ್ಯುಲೆನ್ಸ್ ಬೇಕಾದರೆ 108 ಗೆ ಕಾಲ್ ಮಾಡಿ.',
+        transliteration: 'Ambulance bekaadare 108 ge call maadi.',
+        englishMeaning: 'Call 108 if you need an emergency ambulance.'
       }
     ]
   },
@@ -446,49 +636,161 @@ export const CURATED_PHRASES = [
         englishMeaning: 'Have a wonderful day!'
       }
     ]
+  },
+  {
+    id: 'conv-04',
+    situation: 'conversation',
+    situationLabel: 'Everyday Conversations',
+    english: 'How much does this cost?',
+    intentMatch: ['how much', 'cost', 'price', 'eshtu', 'how much is this', 'what is the price', 'rate', 'eshtu roopayi'],
+    kannada: 'ಇದು ಎಷ್ಟು ರೂಪಾಯಿ?',
+    transliteration: 'Idu eshtu roopayi?',
+    pronunciationGuide: 'EE-du ESH-tu roo-PAA-yi?',
+    contextNote: 'Universal question when asking the price of any item or service across Karnataka.',
+    verified: true,
+    replies: [
+      {
+        kannada: 'ನೂರು ರೂಪಾಯಿ ಮಾತ್ರ.',
+        transliteration: 'Nooru roopayi maatra.',
+        englishMeaning: 'One hundred rupees only.'
+      },
+      {
+        kannada: 'ಬೋರ್ಡ್ ಮೇಲೆ ರೇಟ್ ಹಾಕಿದ್ದೀವಿ ನೋಡಿ.',
+        transliteration: 'Board mele rate haakiddeevi nodi.',
+        englishMeaning: 'Please check, the rates are listed on the board.'
+      },
+      {
+        kannada: 'ಎಷ್ಟು ಪೀಸ್ ತಗೊಳ್ತೀರಾ?',
+        transliteration: 'Eshtu piece tagolteera?',
+        englishMeaning: 'How many pieces will you buy?'
+      }
+    ]
   }
 ];
 
 // Helper to find best curated match offline or when AI is unavailable
 export function findMatchingCuratedPhrase(intent, situation = 'all') {
   if (!intent || !intent.trim()) return null;
-  const lower = intent.toLowerCase().trim();
 
-  // Filter by situation if specified
-  let candidates = CURATED_PHRASES;
-  if (situation && situation !== 'all') {
-    candidates = candidates.filter(p => p.situation === situation);
-    // If no candidate in specific situation, fallback to all
-    if (candidates.length === 0) candidates = CURATED_PHRASES;
+  const raw = intent.toLowerCase().trim();
+  const normalized = raw.replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, ' ').replace(/\s+/g, ' ').trim();
+  const tokens = normalized.split(' ').filter(t => t.length >= 2);
+
+  const STOP_WORDS = new Set([
+    'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'she', 'it', 'they',
+    'a', 'an', 'the', 'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
+    'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'into',
+    'want', 'need', 'please', 'give', 'can', 'could', 'would', 'should',
+    'tell', 'ask', 'know', 'how', 'what', 'where', 'when', 'why', 'which',
+    'some', 'any', 'one', 'two', 'this', 'that', 'these', 'those'
+  ]);
+
+  const contentTokens = tokens.filter(t => !STOP_WORDS.has(t));
+
+  // 1. Direct exact or intentMatch array check
+  for (const phrase of CURATED_PHRASES) {
+    const engLower = phrase.english.toLowerCase();
+    if (engLower === raw || engLower.replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, ' ').trim() === normalized) {
+      return phrase;
+    }
+    if (phrase.intentMatch && phrase.intentMatch.some(m => {
+      const mNorm = m.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, ' ').trim();
+      return normalized === mNorm || normalized.includes(mNorm) || mNorm.includes(normalized);
+    })) {
+      // Prioritize match if user also selected same situation
+      if (!situation || situation === 'all' || phrase.situation === situation) {
+        return phrase;
+      }
+    }
   }
 
-  // Exact or keyword match
-  for (const phrase of candidates) {
-    if (phrase.english.toLowerCase() === lower) return phrase;
-    if (phrase.intentMatch && phrase.intentMatch.some(m => lower.includes(m) || m.includes(lower))) {
+  // If matched above across situations, do a prioritized pass
+  for (const phrase of CURATED_PHRASES) {
+    if (phrase.intentMatch && phrase.intentMatch.some(m => {
+      const mNorm = m.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, ' ').trim();
+      return normalized.includes(mNorm) || mNorm.includes(normalized);
+    })) {
       return phrase;
     }
   }
 
-  // Word overlap scoring
-  const inputWords = lower.split(/\W+/).filter(w => w.length > 2);
+  // 2. High-intent keyword mappings (immediate precision for common Bangalore/Karnataka needs)
+  const KEYWORD_MAP = [
+    { keys: ['tea', 'chai', 'chaa', 'chaha'], id: 'food-04' },
+    { keys: ['water', 'neeru', 'bottle', 'kudiyalu'], id: 'food-05' },
+    { keys: ['coffee', 'kaafi', 'filter coffee'], id: 'food-01' },
+    { keys: ['bill', 'check', 'hisab', 'payment'], id: 'food-03' },
+    { keys: ['washroom', 'toilet', 'restroom', 'bathroom', 'loo', 'mutti'], id: 'trans-05' },
+    { keys: ['stop', 'drop', 'halt', 'nillisi'], id: 'trans-06' },
+    { keys: ['auto', 'meter', 'rickshaw'], id: 'trans-02' },
+    { keys: ['mysuru', 'mysore', 'bus stand', 'ksrtc', 'conductor'], id: 'trans-01' },
+    { keys: ['metro', 'namma metro', 'token', 'smart card'], id: 'trans-03' },
+    { keys: ['majestic', 'city railway', 'kempegowda'], id: 'trans-04' },
+    { keys: ['discount', 'kam', 'bargain', 'reduce', 'offer', 'less'], id: 'shop-02' },
+    { keys: ['upi', 'gpay', 'phonepe', 'paytm', 'qr', 'scan'], id: 'shop-03' },
+    { keys: ['tomato', 'vegetable', 'kilo', 'kg', 'fruit'], id: 'shop-01' },
+    { keys: ['bag', 'cover', 'carrybag', 'carry bag'], id: 'shop-04' },
+    { keys: ['headache', 'medicine', 'tablet', 'pharmacy', 'pain', 'fever', 'medical'], id: 'health-01' },
+    { keys: ['cough', 'throat', 'cold', 'syrup'], id: 'health-02' },
+    { keys: ['hospital', 'clinic', 'doctor'], id: 'health-03' },
+    { keys: ['hello', 'hi', 'namaskara', 'greet'], id: 'conv-01' },
+    { keys: ['slowly', 'slow', 'baralla', 'kannada baralla', 'english'], id: 'conv-02' },
+    { keys: ['thank', 'thanks', 'dhanyavadagalu', 'grateful'], id: 'conv-03' },
+    { keys: ['cost', 'price', 'rate', 'eshtu', 'how much'], id: 'conv-04' }
+  ];
+
+  for (const mapping of KEYWORD_MAP) {
+    const hasKey = mapping.keys.some(k => normalized.includes(k) || tokens.includes(k));
+    if (hasKey) {
+      const target = CURATED_PHRASES.find(p => p.id === mapping.id);
+      if (target) return target;
+    }
+  }
+
+  // 3. Token-based scoring
   let bestPhrase = null;
   let maxScore = 0;
 
-  for (const phrase of candidates) {
-    const targetWords = (phrase.english + ' ' + (phrase.intentMatch || []).join(' ')).toLowerCase().split(/\W+/);
+  for (const phrase of CURATED_PHRASES) {
+    const targetText = (
+      phrase.english + ' ' +
+      (phrase.intentMatch || []).join(' ') + ' ' +
+      (phrase.transliteration || '')
+    ).toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, ' ');
+
+    const targetTokens = new Set(targetText.split(/\s+/).filter(Boolean));
     let score = 0;
-    for (const w of inputWords) {
-      if (targetWords.includes(w)) score++;
+
+    // Check content tokens first
+    for (const t of contentTokens) {
+      if (targetTokens.has(t)) {
+        score += 5;
+      } else {
+        for (const tt of targetTokens) {
+          if (tt.startsWith(t) || t.startsWith(tt)) {
+            score += 2;
+            break;
+          }
+        }
+      }
     }
+
+    // Give slight situation bonus if matches user situation
+    if (situation && situation !== 'all' && phrase.situation === situation) {
+      score += 1;
+    }
+
     if (score > maxScore) {
       maxScore = score;
       bestPhrase = phrase;
     }
   }
 
-  if (maxScore >= 1) return bestPhrase;
+  // ONLY return if there was an actual meaningful match (score >= 4)
+  if (maxScore >= 4) {
+    return bestPhrase;
+  }
 
-  // Fallback to primary bus demo phrase if transport or default
-  return CURATED_PHRASES[0];
+  // If score is low or 0, return null (never falsely return an unrelated phrase)
+  return null;
 }

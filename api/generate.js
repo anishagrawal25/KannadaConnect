@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   // Read Gemini API Key from server environment
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+  if (!apiKey || apiKey === 'undefined' || apiKey === 'your_gemini_api_key_here' || !apiKey.trim()) {
     return res.status(503).json({
       error: 'GEMINI_API_KEY is not configured on the server.',
       code: 'API_KEY_MISSING'
