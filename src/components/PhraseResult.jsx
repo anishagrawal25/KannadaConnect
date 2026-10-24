@@ -83,7 +83,7 @@ export default function PhraseResult({
               ) : (
                 <>
                   <Sparkles size={13} />
-                  <span>AI Generated Phrase</span>
+                  <span>AI Dynamic Translation</span>
                 </>
               )}
             </span>
