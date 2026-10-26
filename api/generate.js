@@ -95,7 +95,7 @@ ${isAlternative ? 'Please provide a fresh alternative phrasing (slightly differe
     }
   };
 
-  const models = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+  const models = ['gemini-3.5-flash-lite', 'gemini-3.5-flash', 'gemini-flash-latest'];
 
   for (const model of models) {
     try {
