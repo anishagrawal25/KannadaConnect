@@ -59,7 +59,21 @@ Given the user's intent in English and their situational context:
 4. Provide the exact English meaning of the Kannada sentence.
 5. Provide a short, practical cultural context tip (e.g. adding polite suffixes like '-ree' or '-kodi', tipping gestures, etc.).
 6. Provide up to 3 plausible replies the local person might respond with in Kannada, with transliteration and English meaning.
-7. Return strictly valid JSON adhering to the specified schema without any markdown formatting.`;
+7. Return strictly valid JSON adhering to this exact format:
+{
+  "kannada": "ಕನ್ನಡ ವಾಕ್ಯ",
+  "transliteration": "Kannada phonetics",
+  "pronunciationGuide": "KAN • NA • DA",
+  "english": "English meaning",
+  "contextNote": "Practical usage tip",
+  "replies": [
+    {
+      "kannada": "ಪ್ರತಿಕ್ರಿಯೆ",
+      "transliteration": "Pratikriye",
+      "englishMeaning": "English meaning of reply"
+    }
+  ]
+}`;
 
   const userPrompt = `User Intent: "${trimmedIntent}"
 Situation Category: ${situation || 'general'}
@@ -81,7 +95,7 @@ ${isAlternative ? 'Please provide a fresh alternative phrasing (slightly differe
     }
   };
 
-  const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash'];
+  const models = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
 
   for (const model of models) {
     try {
